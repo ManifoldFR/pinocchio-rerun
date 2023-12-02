@@ -1,6 +1,5 @@
 #include <fmt/core.h>
 #include <assimp/postprocess.h>
-#include <rerun/components/mesh_properties.hpp>
 
 #include "eigen_adapters.hpp"
 #include "load_mesh.hpp"
