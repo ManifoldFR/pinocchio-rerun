@@ -10,12 +10,6 @@ bool loadPinocchioGeometry(const pinocchio::GeometryObject &obj,
   using namespace hpp::fcl;
 
   const CollisionGeometry &geom = *obj.geometry;
-  std::cout << "Loading geometry " << obj.name
-            << ", meshPath = " << obj.meshPath
-            << ", objectType = " << geom.getObjectType()
-            << ", nodeType = " << geom.getNodeType() << std::endl;
-
-  BVHModelPtr_t p;
 
   switch (geom.getNodeType()) {
   case BV_AABB:
