@@ -6,6 +6,7 @@ enable_testing()
 set(lib_test_util ${LIB_NAME}_test_util)
 add_library(${lib_test_util} STATIC util.cpp)
 target_link_libraries(${lib_test_util} PUBLIC example-robot-data::example-robot-data)
+target_link_libraries(${lib_test_util} PUBLIC fmt::fmt)
 target_link_libraries(${lib_test_util} PRIVATE pinocchio::pinocchio)
 
 # add example

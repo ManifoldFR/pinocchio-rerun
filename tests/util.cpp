@@ -1,10 +1,11 @@
 #include "./util.hpp"
+#include <fmt/core.h>
 
 Robot loadRobotFromURDF(const fs::path &urdfPath,
                         const std::vector<std::string> &package_dirs,
                         bool verbose) {
   if (verbose)
-    std::cout << "URDF path is " << urdfPath << std::endl;
+    fmt::print("URDF path is {}\n", urdfPath.c_str());
 
   pinocchio::Model model;
   pinocchio::GeometryModel vizModel;

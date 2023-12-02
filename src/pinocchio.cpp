@@ -1,5 +1,7 @@
 #include "./pinocchio.hpp"
 
+#include <fmt/core.h>
+
 namespace pinviz {
 
 bool loadPinocchioGeometry(const pinocchio::GeometryObject &obj,
@@ -70,7 +72,7 @@ rerun::Mesh3D loadMesh(const pinocchio::GeometryObject &obj,
   vector<rerun::Color> vertex_colors(numVtx, rgba);
 
   auto props = rerun::MeshProperties(indices);
-  std::cout << "num mesh vtx: " << numVtx << std::endl;
+  fmt::print("Num Mesh vertices: {:d}\n", numVtx);
   return rerun::Mesh3D(vertex_positions)
       .with_mesh_properties(props)
       .with_vertex_colors(vertex_colors);

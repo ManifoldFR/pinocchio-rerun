@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <fmt/core.h>
 
 #include "rerun_visualizer.hpp"
 #include "./util.hpp"
@@ -25,7 +26,7 @@ TEST(LoadRobotTest, load) {
 TEST(LoadRobotTest, UR3_visualizer) {
   Robot robot = loadUR("ur3_gripper");
 
-  std::cout << "Model: " << robot.model.name << std::endl;
+  fmt::print("Model: {}\n", robot.model.name);
   pinviz::RerunVisualizer rr(robot.model, robot.vizModel);
   rr.stream.set_time_seconds("stable_time", 0.0);
   rr.initViewer();

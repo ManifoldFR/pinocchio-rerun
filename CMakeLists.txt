@@ -11,7 +11,8 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 find_package(pinocchio REQUIRED)
-find_package(fmt REQUIRED)
+find_package(assimp REQUIRED)
+find_package(fmt 10.0 REQUIRED)
 
 include(FetchContent)
 
@@ -32,6 +33,7 @@ add_library(${LIB_NAME} SHARED "${lib_SRC}")
 
 target_include_directories(${LIB_NAME} PUBLIC src/)
 target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
+target_link_libraries(${LIB_NAME} PRIVATE fmt::fmt)
 target_link_libraries(${LIB_NAME} PUBLIC pinocchio::pinocchio)
 
 add_subdirectory(pyseptum)
