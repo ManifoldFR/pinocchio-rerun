@@ -10,7 +10,20 @@ add_library(${PYLIB} SHARED ${py_SRC})
 target_link_libraries(${PYLIB} PUBLIC ${LIB_NAME} eigenpy::eigenpy)
 target_compile_definitions(${PYLIB} PRIVATE MODULE_NAME=${PYLIB})
 
-set_target_properties(${PYLIB} PROPERTIES PREFIX "")
+set(PYLIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITELIB}/${PYLIB}")
+get_relative_rpath(${PYLIB_INSTALL_DIR} PYLIB_INSTALL_RPATH)
+
+set_target_properties(
+  ${PYLIB}
+  PROPERTIES PREFIX ""
+             SUFFIX ${PYTHON_EXT_SUFFIX}
+             LIBRARY_OUTPUT_DIRECTORY ${PYLIB}
+             INSTALL_RPATH "${PYLIB_INSTALL_RPATH};${RERUN_INSTALL_DIR}")
+
+install(TARGETS ${PYLIB} DESTINATION ${PYLIB_INSTALL_DIR})
+
+python_install_on_site(${PYLIB} __init__.py)
+
 # Generate stubs
 
 if(GENERATE_PYTHON_STUBS)
