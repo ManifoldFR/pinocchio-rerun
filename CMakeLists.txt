@@ -32,7 +32,7 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH True)
 
 FetchContent_Declare(
   rerun_sdk
-  URL https://github.com/rerun-io/rerun/releases/latest/download/rerun_cpp_sdk.zip)
+  URL https://github.com/rerun-io/rerun/releases/download/0.11.0/rerun_cpp_sdk.zip)
 FetchContent_MakeAvailable(rerun_sdk)
 set_target_properties(rerun_sdk PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
