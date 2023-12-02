@@ -3,6 +3,13 @@ set(PROJECT_NAME septum)
 set(PROJECT_URL "")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
 find_package(pinocchio REQUIRED)
 find_package(fmt REQUIRED)
 
@@ -15,10 +22,15 @@ FetchContent_MakeAvailable(rerun_sdk)
 
 option(BUILD_TESTING "Build tests" ON)
 
-add_executable(App src/main.cpp)
-set_target_properties(App PROPERTIES CXX_STANDARD 17)
+set(LIB_NAME ${PROJECT_NAME})
+file(GLOB lib_SRC CONFIGURE_DEPENDS "src/*.cpp")
 
-target_link_libraries(App PUBLIC rerun_sdk)
+message(STATUS "Library sources: ${lib_SRC}")
+add_library(${LIB_NAME} SHARED "${lib_SRC}")
+
+target_include_directories(${LIB_NAME} PUBLIC src/)
+target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
+target_link_libraries(${LIB_NAME} PUBLIC pinocchio::pinocchio)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

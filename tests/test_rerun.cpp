@@ -1,9 +1,11 @@
 #include <rerun.hpp>
 #include <rerun/demo_utils.hpp>
 
+#include <gtest/gtest.h>
+
 using namespace rerun::demo;
 
-int main() {
+TEST(RerunTests, TestRerun) {
     // Create a new `RecordingStream` which sends data over TCP to the viewer
     // process.
     const auto rec = rerun::RecordingStream("rerun_example_cpp");
