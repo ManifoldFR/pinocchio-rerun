@@ -1,6 +1,6 @@
 #include <eigenpy/eigenpy.hpp>
 
-#include "RerunVisualizer.hpp"
+#include "rerun_visualizer.hpp"
 
 #define PYMODULE() BOOST_PYTHON_MODULE(MODULE_NAME)
 

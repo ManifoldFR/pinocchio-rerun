@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "RerunVisualizer.hpp"
+#include "rerun_visualizer.hpp"
 #include "./util.hpp"
 
 #include <pinocchio/algorithm/joint-configuration.hpp>

@@ -1,4 +1,4 @@
-#include "RerunVisualizer.hpp"
+#include "rerun_visualizer.hpp"
 
 #include <pinocchio/algorithm/geometry.hpp>
 
