@@ -27,7 +27,6 @@ find_package(fmt 10.0 REQUIRED)
 set(INSTALL_DOCUMENTATION OFF)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
-set(BUILD_SHARED_LIBS ON)
 set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH True)
 
@@ -35,6 +34,7 @@ FetchContent_Declare(
   rerun_sdk
   URL https://github.com/rerun-io/rerun/releases/latest/download/rerun_cpp_sdk.zip)
 FetchContent_MakeAvailable(rerun_sdk)
+set_target_properties(rerun_sdk PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 option(BUILD_PYTHON_INTERFACE "Build the Python bindings for this library." ON)
 cmake_dependent_option(
@@ -53,12 +53,10 @@ target_link_libraries(${LIB_NAME} PRIVATE fmt::fmt)
 target_link_libraries(${LIB_NAME} PUBLIC assimp::assimp)
 target_link_libraries(${LIB_NAME} PUBLIC pinocchio::pinocchio)
 
-set_target_properties(${LIB_NAME} PROPERTIES INSTALL_RPATH "\$ORIGIN/${PROJECT_NAME}")
 install(TARGETS ${LIB_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
-set_target_properties(rerun_sdk PROPERTIES INSTALL_RPATH "\$ORIGIN/../../lib")
 set(RERUN_INSTALL_DIR ${CMAKE_INSTALL_FULL_LIBDIR}/${PROJECT_NAME})
-install(TARGETS rerun_sdk LIBRARY DESTINATION ${RERUN_INSTALL_DIR})
+install(TARGETS rerun_sdk ARCHIVE DESTINATION ${RERUN_INSTALL_DIR})
 
 if(BUILD_PYTHON_INTERFACE)
   add_subdirectory(python)
