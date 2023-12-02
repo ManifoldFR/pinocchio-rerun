@@ -31,6 +31,8 @@ public:
   pinocchio::GeometryData visualData;
   std::string prefix;
 
+  inline bool isInitialized() const { return m_isInitialized; }
+
 protected:
   bool m_isInitialized;
 };
