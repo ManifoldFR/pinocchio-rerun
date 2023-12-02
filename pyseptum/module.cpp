@@ -15,5 +15,6 @@ PYMODULE() {
                                                   bp::no_init)
       .def(bp::init<Model const &, GeometryModel const &>(
           bp::args("self", "model", "geomModel")))
-      .def("initViewer", &RerunVisualizer::initViewer, bp::args("self"));
+      .def("initViewer", &RerunVisualizer::initViewer, bp::args("self"))
+      .def("display", &RerunVisualizer::display, bp::args("self", "q"));
 }
