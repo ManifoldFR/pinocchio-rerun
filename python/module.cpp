@@ -1,5 +1,6 @@
 #include <eigenpy/eigenpy.hpp>
 #include <eigenpy/optional.hpp>
+#include <eigenpy/std-vector.hpp>
 
 #include "rerun_visualizer.hpp"
 
@@ -19,6 +20,8 @@ PYMODULE() {
   bp::import("pinocchio");
 
   eigenpy::OptionalConverter<ConstVectorRef, std::optional>::registration();
+  eigenpy::StdVectorPythonVisitor<vector<VectorRef>, false>::expose(
+      "StdVec_ConstVectorRef");
 
   bp::class_<RerunVisualizer, boost::noncopyable>("RerunVisualizer",
                                                   bp::no_init)
@@ -36,5 +39,7 @@ PYMODULE() {
       .def("disableTimeline", &RerunVisualizer::disableTimeline,
            ("self"_a, "name"_a), "Disable a Rerun timeline.")
       .def("drawFrameVelocities", &RerunVisualizer::drawFrameVelocities,
-           ("self"_a, "frame_ids"_a));
+           ("self"_a, "frame_ids"_a))
+      .def("play", &RerunVisualizer::play,
+           ("self"_a, "qs"_a, "dt"_a, "timeline"_a = "trajectory"));
 }

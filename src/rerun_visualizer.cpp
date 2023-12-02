@@ -67,4 +67,14 @@ void RerunVisualizer::drawFrameVelocities(const vector<FrameIndex> &frame_ids) {
                  .with_labels(std::move(labels)));
 }
 
+void RerunVisualizer::play(const vector<VectorRef> &qs, double dt,
+                           const std::string &timeline) {
+  auto n = qs.size();
+  for (size_t i = 0; i < n; ++i) {
+    double t = int(i) * dt;
+    stream.set_time_seconds(timeline, t);
+    display(qs[i]);
+  }
+}
+
 } // namespace pinviz

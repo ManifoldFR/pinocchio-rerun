@@ -31,6 +31,9 @@ public:
 
   void drawFrameVelocities(const vector<FrameIndex> &frame_ids);
 
+  void play(const vector<VectorRef> &qs, double dt,
+            const std::string &timeline = "trajectory");
+
   inline void switchTimeline(const std::string &name) {
     stream.set_time_sequence(name, 0L);
   }
