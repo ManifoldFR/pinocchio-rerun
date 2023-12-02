@@ -23,3 +23,21 @@ struct rerun::ComponentBatchAdapter<rerun::Position3D,
     return batch_t::take_ownership(std::move(out));
   }
 };
+
+template <>
+struct rerun::ComponentBatchAdapter<rerun::Vector3D,
+                                    std::vector<Eigen::Vector3f>> {
+  using batch_t = rerun::ComponentBatch<rerun::Vector3D>;
+  using vec_t = std::vector<Eigen::Vector3f>;
+
+  batch_t operator()(const vec_t &container) {
+    return batch_t::borrow(container.data(), container.size());
+  }
+
+  batch_t operator()(vec_t &&container) {
+    std::vector<rerun::Vector3D> out(container.size());
+    auto memsize = container.size() * sizeof(Eigen::Vector3f);
+    std::memcpy(out.data(), container.data(), memsize);
+    return batch_t::take_ownership(std::move(out));
+  }
+};
