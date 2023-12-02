@@ -14,7 +14,7 @@ RerunVisualizer::RerunVisualizer(const pinocchio::Model &model,
 }
 
 void RerunVisualizer::initViewer() {
-  loadPinocchioModel(visualModel, stream, m_prefix);
+  loadPinocchioModel(visualModel, stream, m_prefix + "/visual");
   m_initialized = true;
 }
 
