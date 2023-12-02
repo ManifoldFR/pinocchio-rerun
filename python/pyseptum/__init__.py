@@ -1,1 +1,2 @@
-from .pyseptum import *  # noqa
+from .pyseptum import *
+from .pyseptum import __version__

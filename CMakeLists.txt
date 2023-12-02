@@ -56,6 +56,8 @@ add_library(${LIB_NAME} SHARED "${lib_SRC}")
 set(SEPTUM_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 target_include_directories(${LIB_NAME} PUBLIC $<BUILD_INTERFACE:${SEPTUM_SRC_DIR}>
                                               $<INSTALL_INTERFACE:include>)
+set(_build_dir_includes ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME})
+target_include_directories(${LIB_NAME} PUBLIC $<BUILD_INTERFACE:${_build_dir_includes}>)
 target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
 target_link_libraries(${LIB_NAME} PRIVATE fmt::fmt)
 target_link_libraries(${LIB_NAME} PUBLIC assimp::assimp)

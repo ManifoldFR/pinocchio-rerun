@@ -2,7 +2,7 @@
 #include <eigenpy/optional.hpp>
 #include <eigenpy/std-vector.hpp>
 
-#include "rerun_visualizer.hpp"
+#include "septum.hpp"
 
 #define PYMODULE() BOOST_PYTHON_MODULE(MODULE_NAME)
 
@@ -17,8 +17,9 @@ PYMODULE() {
   using pinocchio::GeometryModel;
   using pinocchio::Model;
 
-  eigenpy::enableEigenPy();
+  bp::scope().attr("__version__") = printVersion();
 
+  eigenpy::enableEigenPy();
   bp::import("pinocchio");
 
   eigenpy::OptionalConverter<ConstVectorRef, std::optional>::registration();
