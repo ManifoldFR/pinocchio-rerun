@@ -1,6 +1,8 @@
 #include <fmt/core.h>
 #include <assimp/postprocess.h>
+#include <rerun/components/mesh_properties.hpp>
 
+#include "eigen_adapters.hpp"
 #include "load_mesh.hpp"
 
 namespace pinviz {
@@ -90,6 +92,25 @@ MeshDescription loadMesh(const std::string &meshPath) {
   MeshDescription mesh;
   buildMesh(scene, 0, mesh);
   return mesh;
+}
+
+rerun::archetypes::Mesh3D meshDescriptionToRerun(MeshDescription &&mesh) {
+  uint numTris = mesh.faceTriangles.size();
+  uint numVtx = mesh.vertices.size();
+
+  vector<uint32_t> indices;
+  for (uint i = 0; i < numTris; i++) {
+    Vector3u &tri = mesh.faceTriangles[i];
+    indices.push_back(tri[0]);
+    indices.push_back(tri[1]);
+    indices.push_back(tri[2]);
+  }
+
+  auto rmesh = rerun::archetypes::Mesh3D(std::move(mesh.vertices))
+                   .with_mesh_properties(
+                       rerun::components::MeshProperties(std::move(indices)))
+                   .with_vertex_normals(std::move(mesh.normals));
+  return rmesh;
 }
 
 } // namespace pinviz

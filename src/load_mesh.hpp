@@ -2,6 +2,7 @@
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
+#include <rerun/archetypes/mesh3d.hpp>
 
 #include "data_types.hpp"
 
@@ -19,5 +20,7 @@ void buildMesh(const aiScene *scene, uint vtxOffset, MeshDescription &mesh);
 
 /// Load mesh vertices, normals, and faces.
 MeshDescription loadMesh(const std::string &meshPath);
+
+rerun::archetypes::Mesh3D meshDescriptionToRerun(MeshDescription &&mesh);
 
 } // namespace pinviz
