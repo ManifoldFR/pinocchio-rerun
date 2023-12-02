@@ -11,10 +11,6 @@
 #include "eigen_adapters.hpp"
 #include "data_types.hpp"
 
-namespace pinocchio {
-struct GeometryObject;
-}
-
 namespace pinviz {
 
 namespace fs = std::filesystem;
