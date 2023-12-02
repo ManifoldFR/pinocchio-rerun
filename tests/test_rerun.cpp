@@ -13,9 +13,8 @@ TEST(RerunTests, TestRerun) {
   rec.spawn().exit_on_failure();
 
   // Create some data using the `grid` utility function.
-  auto points = grid<rerun::Position3D, float>({-10.f, -10.f, -10.f},
-                                               {10.f, 10.f, 10.f}, 10);
-  auto colors = grid<rerun::Color, uint8_t>({0, 0, 0}, {255, 255, 255}, 10);
+  auto points = grid3d<rerun::Position3D, float>(-10.f, 10.f, 10);
+  auto colors = grid3d<rerun::Color, uint8_t>(0, 255, 10);
 
   // Log the "my_points" entity with our data, using the `Points3D` archetype.
   rec.log("my_points",

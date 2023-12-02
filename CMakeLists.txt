@@ -33,7 +33,13 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH True)
 FetchContent_Declare(
   rerun_sdk
   URL https://github.com/rerun-io/rerun/releases/download/0.11.0/rerun_cpp_sdk.zip)
-FetchContent_MakeAvailable(rerun_sdk)
+FetchContent_GetProperties(rerun_sdk)
+if(NOT rerun_sdk_POPULATED)
+  # Fetch the content using previously declared details
+  FetchContent_Populate(rerun_sdk)
+  add_subdirectory(${rerun_sdk_SOURCE_DIR} ${rerun_sdk_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+
 set_target_properties(rerun_sdk PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 option(BUILD_PYTHON_INTERFACE "Build the Python bindings for this library." ON)
@@ -43,20 +49,20 @@ cmake_dependent_option(
 
 set(LIB_NAME ${PROJECT_NAME})
 file(GLOB lib_SRC CONFIGURE_DEPENDS "src/*.cpp")
+file(GLOB lib_HEADERS CONFIGURE_DEPENDS "src/*.hpp")
 
-message(STATUS "Library sources: ${lib_SRC}")
 add_library(${LIB_NAME} SHARED "${lib_SRC}")
 
-target_include_directories(${LIB_NAME} PUBLIC src/)
+set(SEPTUM_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_include_directories(${LIB_NAME} PUBLIC $<BUILD_INTERFACE:${SEPTUM_SRC_DIR}>
+                                              $<INSTALL_INTERFACE:include>)
 target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
 target_link_libraries(${LIB_NAME} PRIVATE fmt::fmt)
 target_link_libraries(${LIB_NAME} PUBLIC assimp::assimp)
 target_link_libraries(${LIB_NAME} PUBLIC pinocchio::pinocchio)
 
 install(TARGETS ${LIB_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
-
-set(RERUN_INSTALL_DIR ${CMAKE_INSTALL_FULL_LIBDIR}/${PROJECT_NAME})
-install(TARGETS rerun_sdk ARCHIVE DESTINATION ${RERUN_INSTALL_DIR})
+install(FILES ${lib_HEADERS} DESTINATION include/${PROJECT_NAME})
 
 if(BUILD_PYTHON_INTERFACE)
   add_subdirectory(python)

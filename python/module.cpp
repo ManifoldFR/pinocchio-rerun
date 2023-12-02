@@ -17,6 +17,8 @@ PYMODULE() {
   using pinocchio::GeometryModel;
   using pinocchio::Model;
 
+  eigenpy::enableEigenPy();
+
   bp::import("pinocchio");
 
   eigenpy::OptionalConverter<ConstVectorRef, std::optional>::registration();
