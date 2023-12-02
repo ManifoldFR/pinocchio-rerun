@@ -100,11 +100,10 @@ MeshDescription loadMesh(const std::string &meshPath, Vector3f scale) {
 }
 
 rerun::archetypes::Mesh3D meshDescriptionToRerun(MeshDescription &&mesh) {
-  uint numTris = mesh.faceTriangles.size();
-  uint numVtx = mesh.vertices.size();
+  size_t numTris = mesh.faceTriangles.size();
 
   vector<uint32_t> indices;
-  for (uint i = 0; i < numTris; i++) {
+  for (size_t i = 0; i < numTris; i++) {
     Vector3u &tri = mesh.faceTriangles[i];
     indices.push_back(tri[0]);
     indices.push_back(tri[1]);
