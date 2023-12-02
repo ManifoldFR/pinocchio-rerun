@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 set(PROJECT_NAME septum)
 set(PROJECT_URL "")
+set(PROJECT_CUSTOM_HEADER_EXTENSION "hpp")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -15,6 +16,9 @@ find_package(assimp REQUIRED)
 find_package(fmt 10.0 REQUIRED)
 
 include(FetchContent)
+include(CMakeDependentOption)
+include(cmake-module/base.cmake)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 set(BUILD_SHARED_LIBS ON)
 
@@ -23,7 +27,10 @@ FetchContent_Declare(
   URL https://github.com/rerun-io/rerun/releases/latest/download/rerun_cpp_sdk.zip)
 FetchContent_MakeAvailable(rerun_sdk)
 
-option(BUILD_TESTING "Build tests" ON)
+option(BUILD_PYTHON_INTERFACE "Build the Python bindings for this library." ON)
+cmake_dependent_option(
+  GENERATE_PYTHON_STUBS "Generate stub files for the Python library." ON
+  BUILD_PYTHON_INTERFACE OFF)
 
 set(LIB_NAME ${PROJECT_NAME})
 file(GLOB lib_SRC CONFIGURE_DEPENDS "src/*.cpp")
