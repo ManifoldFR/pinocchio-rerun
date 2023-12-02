@@ -1,5 +1,6 @@
 #include <fmt/core.h>
 #include <assimp/postprocess.h>
+#include <assimp/scene.h>
 
 #include "eigen_adapters.hpp"
 #include "load_mesh.hpp"

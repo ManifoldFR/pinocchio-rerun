@@ -1,7 +1,6 @@
 #pragma once
 
 #include <assimp/Importer.hpp>
-#include <assimp/scene.h>
 #include <rerun/archetypes/mesh3d.hpp>
 
 #include "data_types.hpp"

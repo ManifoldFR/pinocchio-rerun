@@ -34,6 +34,7 @@ add_library(${LIB_NAME} SHARED "${lib_SRC}")
 target_include_directories(${LIB_NAME} PUBLIC src/)
 target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
 target_link_libraries(${LIB_NAME} PRIVATE fmt::fmt)
+target_link_libraries(${LIB_NAME} PUBLIC assimp::assimp)
 target_link_libraries(${LIB_NAME} PUBLIC pinocchio::pinocchio)
 
 add_subdirectory(pyseptum)
