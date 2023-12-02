@@ -25,6 +25,12 @@ public:
   void updatePlacements();
 
   inline const std::string &prefix() const { return m_prefix; }
+  inline void switchTimeline(const std::string &name) {
+    stream.set_time_sequence(name, 0L);
+  }
+  inline void disableTimeline(const std::string &name) {
+    stream.disable_timeline(name);
+  }
 
   rerun::RecordingStream stream;
   const pinocchio::Model &model;

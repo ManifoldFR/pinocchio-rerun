@@ -7,6 +7,10 @@
 
 namespace bp = boost::python;
 
+bp::arg operator""_a(const char *argname, std::size_t) {
+  return bp::arg(argname);
+}
+
 PYMODULE() {
   using namespace pinviz;
   using pinocchio::GeometryModel;
@@ -19,13 +23,16 @@ PYMODULE() {
   bp::class_<RerunVisualizer, boost::noncopyable>("RerunVisualizer",
                                                   bp::no_init)
       .def(bp::init<Model const &, GeometryModel const &>(
-          bp::args("self", "model", "geomModel")))
+          ("self"_a, "model", "geomModel")))
       .def("initViewer", &RerunVisualizer::initViewer, bp::args("self"))
       .def("display", &RerunVisualizer::display,
-           (bp::arg("self"), bp::arg("q") = std::nullopt))
-      .def("updatePlacements", &RerunVisualizer::updatePlacements,
-           bp::args("self"))
+           ("self"_a, "q"_a = std::nullopt))
+      .def("updatePlacements", &RerunVisualizer::updatePlacements, "self"_a)
       .def_readonly("data", &RerunVisualizer::data)
       .def_readonly("visualData", &RerunVisualizer::visualData)
-      .add_property("initialized", &RerunVisualizer::initialized);
+      .add_property("initialized", &RerunVisualizer::initialized)
+      .def("switchTimeline", &RerunVisualizer::switchTimeline,
+           ("self"_a, "name"_a), "Switch Rerun timelines.")
+      .def("disableTimeline", &RerunVisualizer::disableTimeline,
+           ("self"_a, "name"_a), "Disable a Rerun timeline.");
 }
