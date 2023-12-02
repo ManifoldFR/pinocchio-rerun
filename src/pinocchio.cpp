@@ -4,22 +4,52 @@
 
 namespace pinviz {
 
-auto loadPinGeometry(const pinocchio::GeometryObject &geom) {
+bool loadPinocchioGeometry(const pinocchio::GeometryObject &obj,
+                           const rerun::RecordingStream &rr,
+                           const std::string &prefix) {
+  using namespace hpp::fcl;
 
-  MeshLoaderPtr ml = std::make_shared<hpp::fcl::MeshLoader>();
-  hpp::fcl::BVHModelPtr_t p = ml->load(geom.meshPath, geom.meshScale);
+  const CollisionGeometry &geom = *obj.geometry;
+  std::cout << "Loading geometry " << obj.name
+            << ", meshPath = " << obj.meshPath
+            << ", objectType = " << geom.getObjectType()
+            << ", nodeType = " << geom.getNodeType() << std::endl;
 
-  return p;
+  BVHModelPtr_t p;
+
+  switch (geom.getNodeType()) {
+  case BV_AABB:
+  case BV_OBB:
+  case BV_RSS:
+  case BV_kIOS:
+  case BV_OBBRSS:
+  case BV_KDOP16:
+  case BV_KDOP18:
+  case BV_KDOP24: {
+    shared_ptr<MeshLoader> ml = std::make_shared<MeshLoader>();
+    auto p = ml->load(obj.meshPath, obj.meshScale);
+    auto mesh = toRerunMesh(p);
+    rr.log(prefix + obj.name, mesh);
+    break;
+  }
+  case GEOM_BOX: {
+    break;
+  }
+  default:
+    // throw std::logic_error("Unknown HPP-FCL node type.");
+    break;
+  }
+
+  return true;
 }
 
 void loadPinocchioModel(const pinocchio::GeometryModel &geomModel,
-                        rerun::RecordingStream &rr) {
+                        const rerun::RecordingStream &rr,
+                        const std::string &prefix) {
   using GeometryObjectVector = pinocchio::GeometryModel::GeometryObjectVector;
   const GeometryObjectVector &geomObjects = geomModel.geometryObjects;
   for (const auto &gobj : geomObjects) {
-    auto p = loadPinGeometry(gobj);
-    auto m = toRerunMesh(p);
-    rr.log("model/" + gobj.name, std::move(m));
+    loadPinocchioGeometry(gobj, rr, prefix);
   }
 }
 

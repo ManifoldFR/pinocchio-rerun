@@ -14,12 +14,15 @@ struct GeometryObject;
 
 namespace pinviz {
 
-using MeshLoaderPtr = std::shared_ptr<hpp::fcl::MeshLoader>;
+using hpp::fcl::BVHModelPtr_t;
 
-auto loadPinGeometry(const pinocchio::GeometryObject &geom);
+bool loadPinocchioGeometry(const pinocchio::GeometryObject &geom,
+                           const rerun::RecordingStream &rr,
+                           const std::string &prefix);
 
 void loadPinocchioModel(const pinocchio::GeometryModel &geomModel,
-                        rerun::RecordingStream &rr);
+                        const rerun::RecordingStream &rr,
+                        const std::string &prefix = "pin/");
 
 inline auto eigenStdVecCast(const vector<Eigen::Vector3d> &container) {
   vector<Vector3f> out(container.size());
