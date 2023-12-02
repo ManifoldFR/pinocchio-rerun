@@ -12,7 +12,7 @@ const std::vector<std::string> package_dirs_base = {fs::path(ERD_DIR) /
 struct Robot {
   pinocchio::Model model;
   pinocchio::GeometryModel vizModel;
-  pinocchio::GeometryModel collModel;
+  // pinocchio::GeometryModel collModel;
 };
 
 Robot loadRobotFromURDF(const fs::path &urdfPath,
