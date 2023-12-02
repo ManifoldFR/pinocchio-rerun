@@ -8,6 +8,8 @@ add_library(${lib_test_util} STATIC util.cpp)
 target_link_libraries(${lib_test_util} PUBLIC example-robot-data::example-robot-data)
 target_link_libraries(${lib_test_util} PUBLIC fmt::fmt)
 target_link_libraries(${lib_test_util} PRIVATE pinocchio::pinocchio)
+target_compile_definitions(${lib_test_util}
+                           PUBLIC ASSET_DIR="${PROJECT_SOURCE_DIR}/assets")
 
 # add example
 macro(add_unit_test exname)
