@@ -6,6 +6,7 @@
 #include <hpp/fcl/BVH/BVH_model.h>
 
 #include "eigen_adapters.hpp"
+#include "data_types.hpp"
 
 namespace pinocchio {
 struct GeometryObject;
@@ -20,8 +21,8 @@ auto loadPinGeometry(const pinocchio::GeometryObject &geom);
 void loadPinocchioModel(const pinocchio::GeometryModel &geomModel,
                         rerun::RecordingStream &rr);
 
-inline auto eigenStdVecCast(const std::vector<Eigen::Vector3d> &container) {
-  std::vector<Eigen::Vector3f> out(container.size());
+inline auto eigenStdVecCast(const vector<Eigen::Vector3d> &container) {
+  vector<Vector3f> out(container.size());
   for (size_t i = 0; i < out.size(); i++) {
     out[i] = container[i].cast<float>();
   }

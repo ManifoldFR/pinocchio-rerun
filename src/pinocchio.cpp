@@ -28,7 +28,7 @@ rerun::Mesh3D toRerunMesh(const hpp::fcl::BVHModelPtr_t &ptr) {
   uint numVtx = ptr->num_vertices;
 
   // convert down to float
-  std::vector<Eigen::Vector3f> vtx = eigenStdVecCast(*ptr->vertices);
+  vector<Vector3f> vtx = eigenStdVecCast(*ptr->vertices);
   return rerun::Mesh3D(vtx);
 }
 
