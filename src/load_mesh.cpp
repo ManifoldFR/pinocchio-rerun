@@ -10,7 +10,7 @@ namespace internal {
 
 /// @returns Number of vertices
 uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
-                    MeshDescription &mesh) {
+                    Vector3f scale, MeshDescription &mesh) {
   if (!node)
     return 0;
 
@@ -34,13 +34,15 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
 
     for (uint vId = 0; vId < inMesh->mNumVertices; vId++) {
       aiVector3D pos_ = inMesh->mVertices[vId];
-      pos_ = tr * pos_;
+      pos_ *= tr;
       Eigen::Map<Vector3f> p(&pos_.x);
-      mesh.vertices.push_back(p);
+      mesh.vertices.push_back(scale.asDiagonal() * p);
 
-      aiVector3D n_ = inMesh->mNormals[vId];
-      Eigen::Map<Vector3f> n(&n_.x);
-      mesh.normals.push_back(n);
+      if (inMesh->mNormals) {
+        aiVector3D n_ = inMesh->mNormals[vId];
+        Eigen::Map<Vector3f> n(&n_.x);
+        mesh.normals.push_back(n);
+      }
     }
 
     for (uint fId = 0; fId < inMesh->mNumFaces; fId++) {
@@ -56,7 +58,7 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
   }
 
   for (uint cIdx = 0; cIdx < node->mNumChildren; cIdx++) {
-    nbVtx += buildMesh_impl(scene, node->mChildren[cIdx], nbVtx, mesh);
+    nbVtx += buildMesh_impl(scene, node->mChildren[cIdx], nbVtx, scale, mesh);
   }
 
   return nbVtx;
@@ -64,17 +66,20 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
 
 } // namespace internal
 
-void buildMesh(const aiScene *scene, uint vtxOffset, MeshDescription &mesh) {
-  internal::buildMesh_impl(scene, scene->mRootNode, vtxOffset, mesh);
+void buildMesh(const aiScene *scene, uint vtxOffset, MeshDescription &mesh,
+               Vector3f scale) {
+  internal::buildMesh_impl(scene, scene->mRootNode, vtxOffset, scale, mesh);
 }
 
-MeshDescription loadMesh(const std::string &meshPath) {
+MeshDescription loadMesh(const std::string &meshPath, Vector3f scale) {
   ::Assimp::Importer importer;
+  importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE,
+                              aiPrimitiveType_LINE | aiPrimitiveType_POINT);
   const aiScene *scene = importer.ReadFile(
       meshPath, aiProcess_CalcTangentSpace | aiProcess_Triangulate |
-                    aiProcess_GenSmoothNormals | aiProcess_SortByPType |
-                    aiProcess_OptimizeMeshes | aiProcess_JoinIdenticalVertices |
-                    aiProcess_DropNormals | aiProcess_FindDegenerates |
+                    aiProcess_GenNormals | aiProcess_SortByPType |
+                    aiProcess_GenUVCoords | aiProcess_OptimizeMeshes |
+                    aiProcess_RemoveComponent | aiProcess_FindDegenerates |
                     aiProcess_ImproveCacheLocality);
 
   if (!scene) {
@@ -89,7 +94,7 @@ MeshDescription loadMesh(const std::string &meshPath) {
   }
 
   MeshDescription mesh;
-  buildMesh(scene, 0, mesh);
+  buildMesh(scene, 0, mesh, scale);
   return mesh;
 }
 

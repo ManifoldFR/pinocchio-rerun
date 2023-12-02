@@ -16,10 +16,12 @@ struct MeshDescription {
   vector<Vector3u> faceTriangles;
 };
 
-void buildMesh(const aiScene *scene, uint vtxOffset, MeshDescription &mesh);
+void buildMesh(const aiScene *scene, uint vtxOffset, MeshDescription &mesh,
+               Vector3f scale);
 
 /// Load mesh vertices, normals, and faces.
-MeshDescription loadMesh(const std::string &meshPath);
+MeshDescription loadMesh(const std::string &meshPath,
+                         Vector3f scale = Vector3f::Ones());
 
 rerun::archetypes::Mesh3D meshDescriptionToRerun(MeshDescription &&mesh);
 
