@@ -21,5 +21,6 @@ macro(add_unit_test exname)
   gtest_discover_tests(${exname})
 endmacro(add_unit_test)
 
+add_unit_test(test_load_mesh)
 add_unit_test(test_load_robot)
 add_unit_test(test_rerun)
