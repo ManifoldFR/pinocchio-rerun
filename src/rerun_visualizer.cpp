@@ -7,20 +7,19 @@ namespace pinviz {
 RerunVisualizer::RerunVisualizer(const pinocchio::Model &model,
                                  const pinocchio::GeometryModel &geomModel)
     : stream("RerunVisualizer"), model(model), data(model),
-      visualModel(geomModel), visualData(visualModel), m_isInitialized(false) {
-  auto e = stream.spawn();
-  e.exit_on_failure();
-  prefix = "pin/" + model.name + "/";
+      visualModel(geomModel), visualData(visualModel),
+      m_prefix("pin/" + model.name + "/"), m_initialized(false) {
+  stream.spawn().exit_on_failure();
   stream.set_time_seconds("stable_time", 0.0);
 }
 
 void RerunVisualizer::initViewer() {
-  loadPinocchioModel(visualModel, stream, prefix);
-  m_isInitialized = true;
+  loadPinocchioModel(visualModel, stream, m_prefix);
+  m_initialized = true;
 }
 
 void RerunVisualizer::display(ConstVectorRef const &q) {
-  if (!m_isInitialized)
+  if (!m_initialized)
     throw std::runtime_error("Visualizer is not initialized.");
   pinocchio::forwardKinematics(model, data, q);
 
@@ -38,7 +37,7 @@ void RerunVisualizer::updatePlacements() {
     const pinocchio::SE3 &M =
         visualData.oMg[visualModel.getGeometryId(gobj.name)];
 
-    auto path = getEntityPath(gobj, prefix).string();
+    auto path = getEntityPath(gobj, m_prefix).string();
     stream.log(path, pinSE3toRerun(M));
   }
 }

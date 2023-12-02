@@ -24,17 +24,19 @@ public:
 
   void updatePlacements();
 
+  inline const std::string &prefix() const { return m_prefix; }
+
   rerun::RecordingStream stream;
   const pinocchio::Model &model;
   pinocchio::Data data;
   const pinocchio::GeometryModel &visualModel;
   pinocchio::GeometryData visualData;
-  std::string prefix;
 
-  inline bool isInitialized() const { return m_isInitialized; }
+  inline bool initialized() const { return m_initialized; }
 
 protected:
-  bool m_isInitialized;
+  std::string m_prefix;
+  bool m_initialized;
 };
 
 } // namespace pinviz

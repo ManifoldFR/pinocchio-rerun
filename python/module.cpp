@@ -23,5 +23,5 @@ PYMODULE() {
            bp::args("self"))
       .def_readonly("data", &RerunVisualizer::data)
       .def_readonly("visualData", &RerunVisualizer::visualData)
-      .add_property("isInitialized", &RerunVisualizer::isInitialized);
+      .add_property("initialized", &RerunVisualizer::initialized);
 }
