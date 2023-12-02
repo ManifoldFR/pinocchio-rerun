@@ -1,23 +1,28 @@
 #pragma once
 
 #include "pinocchio.hpp"
-#include <pinocchio/algorithm/kinematics.hpp>
+
 #include <pinocchio/multibody/geometry.hpp>
 
 namespace pinviz {
+
+template <typename Scalar>
+auto pinSE3toRerun(const pinocchio::SE3Tpl<Scalar, Eigen::ColMajor> &tr_) {
+  auto tr = tr_.template cast<float>();
+  return rerun::Transform3D{rerun::Vec3D(tr.translation().data()),
+                            rerun::Mat3x3(tr.rotation().data())};
+}
 
 class RerunVisualizer {
 public:
   RerunVisualizer(const pinocchio::Model &model,
                   const pinocchio::GeometryModel &geomModel);
 
-  void initViewer();
+  void initViewer() const;
 
-  void display(ConstVectorRef const &q) {
-    pinocchio::forwardKinematics(model, data, q);
+  void display(const ConstVectorRef &q);
 
-    int nframes = model.nframes;
-  }
+  void updatePlacements();
 
   rerun::RecordingStream stream;
   const pinocchio::Model &model;
