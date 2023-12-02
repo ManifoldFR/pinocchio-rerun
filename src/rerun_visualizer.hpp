@@ -18,7 +18,7 @@ public:
   RerunVisualizer(const pinocchio::Model &model,
                   const pinocchio::GeometryModel &geomModel);
 
-  void initViewer() const;
+  void initViewer();
 
   void display(const ConstVectorRef &q);
 
@@ -30,6 +30,9 @@ public:
   const pinocchio::GeometryModel &visualModel;
   pinocchio::GeometryData visualData;
   std::string prefix;
+
+protected:
+  bool m_isInitialized;
 };
 
 } // namespace pinviz
