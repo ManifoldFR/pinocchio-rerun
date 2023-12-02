@@ -13,7 +13,13 @@ FetchContent_Declare(
   URL https://github.com/rerun-io/rerun/releases/latest/download/rerun_cpp_sdk.zip)
 FetchContent_MakeAvailable(rerun_sdk)
 
+option(BUILD_TESTING "Build tests" ON)
+
 add_executable(App src/main.cpp)
 set_target_properties(App PROPERTIES CXX_STANDARD 17)
 
 target_link_libraries(App PUBLIC rerun_sdk)
+
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif(BUILD_TESTING)
