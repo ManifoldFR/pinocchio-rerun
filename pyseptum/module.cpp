@@ -1,8 +1,17 @@
-#include "pinviz.hpp"
 #include <eigenpy/eigenpy.hpp>
 
-#include <string_view>
+#include "pinviz.hpp"
 
 #define PYMODULE() BOOST_PYTHON_MODULE(MODULE_NAME)
 
-PYMODULE() { using namespace pinviz; }
+namespace bp = boost::python;
+
+PYMODULE() {
+  using namespace pinviz;
+  using pinocchio::GeometryModel;
+
+  bp::class_<RerunVisualizer, boost::noncopyable>("RerunVisualizer",
+                                                  bp::no_init)
+      .def(bp::init<GeometryModel const &>(bp::args("self", "geomModel")))
+      .def("initViewer", &RerunVisualizer::initViewer, bp::args("self"));
+}

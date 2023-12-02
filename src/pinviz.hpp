@@ -9,6 +9,8 @@ class RerunVisualizer {
 public:
   RerunVisualizer(const pinocchio::GeometryModel &geomModel);
 
+  void initViewer();
+
   rerun::RecordingStream stream;
   const pinocchio::GeometryModel &visualModel;
   pinocchio::GeometryData visualData;

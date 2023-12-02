@@ -3,9 +3,14 @@
 namespace pinviz {
 
 RerunVisualizer::RerunVisualizer(const pinocchio::GeometryModel &geomModel)
-    : stream("RerunVisualizer"), visualModel(geomModel), visualData(geomModel) {
-  stream.spawn().exit_on_failure();
-  loadPinocchioModel(geomModel, stream);
+    : stream("RerunVisualizer"), visualModel(geomModel),
+      visualData(visualModel) {
+  auto e = stream.spawn();
+  e.exit_on_failure();
+}
+
+void RerunVisualizer::initViewer() {
+  loadPinocchioModel(visualModel, stream, "pinviz/");
 }
 
 } // namespace pinviz
