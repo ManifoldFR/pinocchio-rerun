@@ -1,10 +1,10 @@
 #include "pinviz.hpp"
 
-#include <pinocchio/multibody/geometry.hpp>
-
 namespace pinviz {
 
-void RerunVisualizer::loadModel(const pinocchio::GeometryModel &geomModel) {
+RerunVisualizer::RerunVisualizer(const pinocchio::GeometryModel &geomModel)
+    : stream("RerunVisualizer"), visualModel(geomModel), visualData(geomModel) {
+  stream.spawn().exit_on_failure();
   loadPinocchioModel(geomModel, stream);
 }
 
