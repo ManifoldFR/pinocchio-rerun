@@ -1,0 +1,24 @@
+ci:
+    autoupdate_branch: main
+repos:
+-   repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v16.0.6
+    hooks:
+    -   id: clang-format
+        args: ['--style={BasedOnStyle: LLVM, SortIncludes: false}']
+        exclude: ^third-party/
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    -   id: detect-private-key
+    -   id: end-of-file-fixer
+    -   id: mixed-line-ending
+    -   id: check-merge-conflict
+    -   id: trailing-whitespace
+-   repo: https://github.com/cheshirekow/cmake-format-precommit
+    rev: v0.6.13
+    hooks:
+    -   id: cmake-format
+        additional_dependencies: [pyyaml>=5.1]
+    -   id: cmake-lint
+        additional_dependencies: [pyyaml>=5.1]
