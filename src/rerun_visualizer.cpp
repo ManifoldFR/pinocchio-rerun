@@ -18,10 +18,11 @@ void RerunVisualizer::initViewer() {
   m_initialized = true;
 }
 
-void RerunVisualizer::display(ConstVectorRef const &q) {
+void RerunVisualizer::display(const std::optional<ConstVectorRef> &q) {
   if (!m_initialized)
     throw std::runtime_error("Visualizer is not initialized.");
-  pinocchio::forwardKinematics(model, data, q);
+  if (q.has_value())
+    pinocchio::forwardKinematics(model, data, *q);
 
   updatePlacements();
 }

@@ -9,8 +9,10 @@ model = robot.model
 visual_model = robot.visual_model
 rr = pyseptum.RerunVisualizer(model, visual_model)
 rr.initViewer()
+assert rr.initialized
 q0 = pin.neutral(model)
 rr.display(q0)
+rr.display()
 
 
 def displayRandomConfiguration():

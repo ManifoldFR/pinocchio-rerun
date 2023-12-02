@@ -20,7 +20,7 @@ public:
 
   void initViewer();
 
-  void display(const ConstVectorRef &q);
+  void display(const std::optional<ConstVectorRef> &q = std::nullopt);
 
   void updatePlacements();
 
