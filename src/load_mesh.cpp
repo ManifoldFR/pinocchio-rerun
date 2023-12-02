@@ -21,7 +21,7 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
   // traverse through to root, get global transform
   while (pNode) {
     // update transform
-    if (pNode->mParent == nullptr) {
+    if (pNode->mParent != nullptr) {
       tr = pNode->mTransformation * tr;
     }
     pNode = pNode->mParent;
