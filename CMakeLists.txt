@@ -34,6 +34,8 @@ target_include_directories(${LIB_NAME} PUBLIC src/)
 target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
 target_link_libraries(${LIB_NAME} PUBLIC pinocchio::pinocchio)
 
+add_subdirectory(pyseptum)
+
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif(BUILD_TESTING)
