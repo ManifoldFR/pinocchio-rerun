@@ -34,5 +34,7 @@ PYMODULE() {
       .def("switchTimeline", &RerunVisualizer::switchTimeline,
            ("self"_a, "name"_a), "Switch Rerun timelines.")
       .def("disableTimeline", &RerunVisualizer::disableTimeline,
-           ("self"_a, "name"_a), "Disable a Rerun timeline.");
+           ("self"_a, "name"_a), "Disable a Rerun timeline.")
+      .def("drawFrameVelocities", &RerunVisualizer::drawFrameVelocities,
+           ("self"_a, "frame_ids"_a));
 }

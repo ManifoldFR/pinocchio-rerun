@@ -13,6 +13,8 @@ auto pinSE3toRerun(const pinocchio::SE3Tpl<Scalar, Eigen::ColMajor> &tr_) {
                             rerun::Mat3x3(tr.rotation().data())};
 }
 
+using pinocchio::FrameIndex;
+
 class RerunVisualizer {
 public:
   RerunVisualizer(const pinocchio::Model &model,
@@ -25,6 +27,10 @@ public:
   void updatePlacements();
 
   inline const std::string &prefix() const { return m_prefix; }
+  std::string visualPrefix() const { return m_prefix + "/visual"; }
+
+  void drawFrameVelocities(const vector<FrameIndex> &frame_ids);
+
   inline void switchTimeline(const std::string &name) {
     stream.set_time_sequence(name, 0L);
   }
