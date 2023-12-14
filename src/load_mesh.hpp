@@ -5,10 +5,12 @@
 
 #include "data_types.hpp"
 
-#define PASTEL_RGBA(r, g, b, a)     (((a)&0xFF)<<(8*3))|(((b)&0xFF)<<(8*2))|(((g)&0xFF)<<(8*1))|(((r)&0xFF)<<(8*0));
+#define COLOR_FLOAT_TO_INT(f)       ((f >= 1.0 ? 255 : (f <= 0.0 ? 0 : (int)floor(f * 256.0))))
+#define PASTEL_RGBA(r, g, b, a)     (((r)&0xFF)<<(8*3))|(((g)&0xFF)<<(8*2))|(((b)&0xFF)<<(8*1))|(((a)&0xFF)<<(8*0));
 namespace pinviz {
 
 using Vector3u = Eigen::Matrix<uint32_t, 3, 1>;
+using Vector4d = Eigen::Matrix<float, 4, 1>;
 
 struct MeshDescription {
   vector<Vector3f> vertices;
@@ -18,11 +20,12 @@ struct MeshDescription {
 };
 
 void buildMesh(const aiScene *scene, uint vtxOffset, MeshDescription &mesh,
-               Vector3f scale);
+               Vector3f scale, Vector4d color);
 
 /// Load mesh vertices, normals, and faces.
 MeshDescription loadMesh(const std::string &meshPath,
-                         Vector3f scale = Vector3f::Ones());
+                         Vector3f scale = Vector3f::Ones(),
+                         Vector4d color = Vector4d::Ones());
 
 rerun::archetypes::Mesh3D meshDescriptionToRerun(MeshDescription &&mesh);
 

@@ -11,7 +11,7 @@ namespace internal {
 
 /// @returns Number of vertices
 uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
-                    MeshDescription &mesh, Vector3f scale) {
+                    MeshDescription &mesh, Vector3f scale, Vector4d color) {
   if (!node)
     return 0;
 
@@ -39,16 +39,17 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
       Eigen::Map<Vector3f> p(&pos_.x);
       mesh.vertices.push_back(scale.asDiagonal() * p);
 
+      vector<uint32_t> c_;
+      for (int cId=0; cId<4; ++cId) {
+        c_.push_back((uint32_t) (COLOR_FLOAT_TO_INT(color[cId])));
+      }
+      uint32_t c = PASTEL_RGBA(c_[0], c_[1], c_[2], c_[3]);
+      mesh.colors.push_back(c);
+
       if (inMesh->mNormals) {
         aiVector3D n_ = inMesh->mNormals[vId];
         Eigen::Map<Vector3f> n(&n_.x);
         mesh.normals.push_back(n);
-      }
-
-      if (inMesh->mColors[0]) {
-        aiColor4D c_ = inMesh->mColors[0][vId];
-        uint32_t c = PASTEL_RGBA(int(c_.r), int(c_.g), int(c_.b), int(c_.a));
-        mesh.colors.push_back(c);
       }
     }
 
@@ -65,7 +66,7 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
   }
 
   for (uint cIdx = 0; cIdx < node->mNumChildren; cIdx++) {
-    nbVtx += buildMesh_impl(scene, node->mChildren[cIdx], nbVtx, mesh, scale);
+    nbVtx += buildMesh_impl(scene, node->mChildren[cIdx], nbVtx, mesh, scale, color);
   }
 
   return nbVtx;
@@ -74,11 +75,11 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
 } // namespace internal
 
 void buildMesh(const aiScene *scene, uint vtxOffset, MeshDescription &mesh,
-               Vector3f scale) {
-  internal::buildMesh_impl(scene, scene->mRootNode, vtxOffset, mesh, scale);
+               Vector3f scale, Vector4d color) {
+  internal::buildMesh_impl(scene, scene->mRootNode, vtxOffset, mesh, scale, color);
 }
 
-MeshDescription loadMesh(const std::string &meshPath, Vector3f scale) {
+MeshDescription loadMesh(const std::string &meshPath, Vector3f scale, Vector4d color) {
   ::Assimp::Importer importer;
   importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE,
                               aiPrimitiveType_LINE | aiPrimitiveType_POINT);
@@ -101,7 +102,7 @@ MeshDescription loadMesh(const std::string &meshPath, Vector3f scale) {
   }
 
   MeshDescription mesh;
-  buildMesh(scene, 0, mesh, scale);
+  buildMesh(scene, 0, mesh, scale, color);
   return mesh;
 }
 
