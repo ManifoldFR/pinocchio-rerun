@@ -11,7 +11,7 @@ namespace internal {
 
 /// @returns Number of vertices
 uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
-                    Vector3f scale, MeshDescription &mesh) {
+                    MeshDescription &mesh, Vector3f scale) {
   if (!node)
     return 0;
 
@@ -44,6 +44,12 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
         Eigen::Map<Vector3f> n(&n_.x);
         mesh.normals.push_back(n);
       }
+
+      if (inMesh->mColors[0]) {
+        aiColor4D c_ = inMesh->mColors[0][vId];
+        uint32_t c = PASTEL_RGBA(int(c_.r), int(c_.g), int(c_.b), int(c_.a));
+        mesh.colors.push_back(c);
+      }
     }
 
     for (uint fId = 0; fId < inMesh->mNumFaces; fId++) {
@@ -59,7 +65,7 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
   }
 
   for (uint cIdx = 0; cIdx < node->mNumChildren; cIdx++) {
-    nbVtx += buildMesh_impl(scene, node->mChildren[cIdx], nbVtx, scale, mesh);
+    nbVtx += buildMesh_impl(scene, node->mChildren[cIdx], nbVtx, mesh, scale);
   }
 
   return nbVtx;
@@ -69,7 +75,7 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
 
 void buildMesh(const aiScene *scene, uint vtxOffset, MeshDescription &mesh,
                Vector3f scale) {
-  internal::buildMesh_impl(scene, scene->mRootNode, vtxOffset, scale, mesh);
+  internal::buildMesh_impl(scene, scene->mRootNode, vtxOffset, mesh, scale);
 }
 
 MeshDescription loadMesh(const std::string &meshPath, Vector3f scale) {
@@ -113,7 +119,8 @@ rerun::archetypes::Mesh3D meshDescriptionToRerun(MeshDescription &&mesh) {
   auto rmesh = rerun::archetypes::Mesh3D(std::move(mesh.vertices))
                    .with_mesh_properties(
                        rerun::components::MeshProperties(std::move(indices)))
-                   .with_vertex_normals(std::move(mesh.normals));
+                   .with_vertex_normals(std::move(mesh.normals))
+                   .with_vertex_colors(std::move(mesh.colors));
   return rmesh;
 }
 
