@@ -1,4 +1,5 @@
 include(${PROJECT_SOURCE_DIR}/cmake-module/stubs.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake-module/python.cmake)
 
 find_package(eigenpy REQUIRED)
 
@@ -22,7 +23,7 @@ set_target_properties(
 
 install(TARGETS ${PYLIB} DESTINATION ${PYLIB_INSTALL_DIR})
 
-python_install_on_site(${PYLIB} __init__.py)
+PYTHON_INSTALL_ON_SITE(${PYLIB} __init__.py)
 
 # Generate stubs
 
