@@ -2,12 +2,12 @@ ci:
     autoupdate_branch: main
 repos:
 -   repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v17.0.5
+    rev: v18.1.3
     hooks:
     -   id: clang-format
         exclude: ^third-party/
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
     -   id: detect-private-key
     -   id: end-of-file-fixer
