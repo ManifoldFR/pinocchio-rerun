@@ -2,7 +2,7 @@
 
 #include "pinocchio.hpp"
 
-#include <pinocchio/multibody/geometry.hpp>
+#include <pinocchio_visualizers/base-visualizer.hpp>
 
 namespace pinrerun {
 
@@ -14,25 +14,26 @@ auto pinSE3toRerun(const pinocchio::SE3Tpl<Scalar, Eigen::ColMajor> &tr_) {
 }
 
 using pinocchio::FrameIndex;
+using BaseVisualizer = pinocchio_visualizers::BaseVisualizer<double>;
 
-class RerunVisualizer {
+class RerunVisualizer : public BaseVisualizer {
 public:
   RerunVisualizer(const pinocchio::Model &model,
                   const pinocchio::GeometryModel &geomModel);
 
-  void initViewer();
-
-  void display(const std::optional<ConstVectorRef> &q = std::nullopt);
-
-  void updatePlacements();
+  void loadViewerModel() override;
 
   inline const std::string &prefix() const { return m_prefix; }
   std::string visualPrefix() const { return m_prefix + "/visual"; }
 
   void drawFrameVelocities(const vector<FrameIndex> &frame_ids);
 
-  void play(const vector<VectorRef> &qs, double dt,
-            const std::string &timeline = "trajectory");
+  void play(const vector<ConstVectorRef> &qs, double dt) override {
+    this->play(qs, dt, "trajectory");
+  }
+
+  void play(const vector<ConstVectorRef> &qs, double dt,
+            const std::string &timeline);
 
   inline void switchTimeline(const std::string &name) {
     stream.set_time_sequence(name, 0L);
@@ -42,14 +43,11 @@ public:
   }
 
   rerun::RecordingStream stream;
-  const pinocchio::Model &model;
-  pinocchio::Data data;
-  const pinocchio::GeometryModel &visualModel;
-  pinocchio::GeometryData visualData;
 
   inline bool initialized() const { return m_initialized; }
 
 protected:
+  void displayImpl() override;
   std::string m_prefix;
   bool m_initialized;
 };

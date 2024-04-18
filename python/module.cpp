@@ -1,6 +1,7 @@
 #include <eigenpy/eigenpy.hpp>
 #include <eigenpy/optional.hpp>
 #include <eigenpy/std-vector.hpp>
+#include <pinocchio_visualizers/python/visitor.hpp>
 
 #include "septum.hpp"
 
@@ -12,8 +13,17 @@ bp::arg operator""_a(const char *argname, std::size_t) {
   return bp::arg(argname);
 }
 
+template <typename M>
+auto convertToStdVecConstRef(const std::vector<Eigen::Ref<M>> &xs_) {
+  std::vector<Eigen::Ref<const M>> xs;
+  for (size_t i = 0; i < xs_.size(); i++) {
+    xs.emplace_back(xs_[i]);
+  }
+  return xs;
+}
+
 PYMODULE() {
-  using namespace pinviz;
+  using namespace pinrerun;
   using pinocchio::GeometryModel;
   using pinocchio::Model;
 
@@ -24,18 +34,13 @@ PYMODULE() {
 
   eigenpy::OptionalConverter<ConstVectorRef, std::optional>::registration();
   eigenpy::StdVectorPythonVisitor<vector<VectorRef>, false>::expose(
-      "StdVec_ConstVectorRef");
+      "StdVec_VectorRef");
 
   bp::class_<RerunVisualizer, boost::noncopyable>("RerunVisualizer",
                                                   bp::no_init)
       .def(bp::init<Model const &, GeometryModel const &>(
           ("self"_a, "model", "geomModel")))
-      .def("initViewer", &RerunVisualizer::initViewer, bp::args("self"))
-      .def("display", &RerunVisualizer::display,
-           ("self"_a, "q"_a = std::nullopt))
-      .def("updatePlacements", &RerunVisualizer::updatePlacements, "self"_a)
-      .def_readonly("data", &RerunVisualizer::data)
-      .def_readonly("visualData", &RerunVisualizer::visualData)
+      .def(pinviz::VisualizerVisitor<RerunVisualizer>())
       .add_property("initialized", &RerunVisualizer::initialized)
       .def("switchTimeline", &RerunVisualizer::switchTimeline,
            ("self"_a, "name"_a), "Switch Rerun timelines.")
@@ -43,6 +48,11 @@ PYMODULE() {
            ("self"_a, "name"_a), "Disable a Rerun timeline.")
       .def("drawFrameVelocities", &RerunVisualizer::drawFrameVelocities,
            ("self"_a, "frame_ids"_a))
-      .def("play", &RerunVisualizer::play,
-           ("self"_a, "qs"_a, "dt"_a, "timeline"_a = "trajectory"));
+      .def(
+          "play",
+          +[](RerunVisualizer &v, const vector<VectorRef> &qs, double dt,
+              std::string timeline) {
+            v.play(convertToStdVecConstRef(qs), dt, timeline);
+          },
+          ("self"_a, "qs"_a, "dt"_a, "timeline"_a = "trajectory"));
 }

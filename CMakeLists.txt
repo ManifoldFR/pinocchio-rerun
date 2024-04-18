@@ -22,6 +22,7 @@ compute_project_args(PROJECT_ARGS LANGUAGES CXX)
 project(${PROJECT_NAME} ${PROJECT_ARGS})
 
 add_project_dependency(pinocchio REQUIRED)
+add_project_dependency(pinocchio_visualizers REQUIRED)
 add_project_dependency(assimp REQUIRED)
 add_project_dependency(fmt 10.0 REQUIRED)
 
@@ -63,6 +64,7 @@ target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
 target_link_libraries(${LIB_NAME} PRIVATE fmt::fmt)
 target_link_libraries(${LIB_NAME} PUBLIC assimp::assimp)
 target_link_libraries(${LIB_NAME} PUBLIC pinocchio::pinocchio)
+target_link_libraries(${LIB_NAME} PUBLIC pinocchio_visualizers::pinocchio_visualizers)
 
 install(TARGETS ${LIB_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 install(FILES ${lib_HEADERS} DESTINATION include/${PROJECT_NAME})
