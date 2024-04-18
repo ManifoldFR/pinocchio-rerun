@@ -78,7 +78,7 @@ MeshDescription loadMesh(const std::string &meshPath, Vector3f scale) {
                               aiPrimitiveType_LINE | aiPrimitiveType_POINT);
   const aiScene *scene = importer.ReadFile(
       meshPath, aiProcess_CalcTangentSpace | aiProcess_Triangulate |
-                    aiProcess_GenNormals | aiProcess_SortByPType |
+                    aiProcess_GenSmoothNormals | aiProcess_SortByPType |
                     aiProcess_GenUVCoords | aiProcess_OptimizeMeshes |
                     aiProcess_RemoveComponent | aiProcess_FindDegenerates |
                     aiProcess_ImproveCacheLocality);
