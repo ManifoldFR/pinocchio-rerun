@@ -24,7 +24,7 @@ bool loadPinocchioGeometry(const pinocchio::GeometryObject &obj,
     case BV_KDOP16:
     case BV_KDOP18:
     case BV_KDOP24: {
-      auto meshDesc = loadMesh(obj.meshPath, obj.meshScale.cast<float>());
+      auto meshDesc = loadMesh(obj.meshPath, obj.meshScale.cast<float>(), obj.meshColor.cast<float>());
       auto rrMesh = meshDescriptionToRerun(std::move(meshDesc));
       rr.log_timeless(getEntityPath(obj, prefix).string(), rrMesh);
       break;
