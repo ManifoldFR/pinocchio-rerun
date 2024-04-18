@@ -5,7 +5,7 @@
 #include "deprecated.hpp"
 #include "rerun_visualizer.hpp"
 
-namespace pinviz {
+namespace pinrerun {
 
 inline std::string printVersion(const char *delimiter = ".") {
   std::ostringstream oss;
@@ -14,4 +14,4 @@ inline std::string printVersion(const char *delimiter = ".") {
   return oss.str();
 }
 
-} // namespace pinviz
+} // namespace pinrerun

@@ -21,9 +21,10 @@ include(cmake-module/base.cmake)
 compute_project_args(PROJECT_ARGS LANGUAGES CXX)
 project(${PROJECT_NAME} ${PROJECT_ARGS})
 
-find_package(pinocchio REQUIRED)
-find_package(assimp REQUIRED)
-find_package(fmt 10.0 REQUIRED)
+add_project_dependency(pinocchio REQUIRED)
+add_project_dependency(pinocchio_visualizers REQUIRED)
+add_project_dependency(assimp REQUIRED)
+add_project_dependency(fmt 10.0 REQUIRED)
 
 set(INSTALL_DOCUMENTATION OFF)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
@@ -33,7 +34,7 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH True)
 
 FetchContent_Declare(
   rerun_sdk
-  URL https://github.com/rerun-io/rerun/releases/download/0.11.0/rerun_cpp_sdk.zip)
+  URL https://github.com/rerun-io/rerun/releases/download/0.15.1/rerun_cpp_sdk.zip)
 FetchContent_GetProperties(rerun_sdk)
 if(NOT rerun_sdk_POPULATED)
   # Fetch the content using previously declared details
@@ -63,6 +64,7 @@ target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
 target_link_libraries(${LIB_NAME} PRIVATE fmt::fmt)
 target_link_libraries(${LIB_NAME} PUBLIC assimp::assimp)
 target_link_libraries(${LIB_NAME} PUBLIC pinocchio::pinocchio)
+target_link_libraries(${LIB_NAME} PUBLIC pinocchio_visualizers::pinocchio_visualizers)
 
 install(TARGETS ${LIB_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 install(FILES ${lib_HEADERS} DESTINATION include/${PROJECT_NAME})

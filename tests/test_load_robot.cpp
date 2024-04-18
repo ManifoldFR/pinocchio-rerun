@@ -27,7 +27,7 @@ TEST(LoadRobotTest, UR3_visualizer) {
   Robot robot = loadUR("ur3_gripper");
 
   fmt::print("Model: {}\n", robot.model.name);
-  pinviz::RerunVisualizer rr(robot.model, robot.vizModel);
+  pinrerun::RerunVisualizer rr(robot.model, robot.vizModel);
   rr.stream.set_time_seconds("stable_time", 0.0);
   rr.initViewer();
 
@@ -39,7 +39,7 @@ TEST(LoadRobotTest, UR5_visualizer) {
   Robot robot = loadUR("ur5_robot");
 
   fmt::print("Model: {}\n", robot.model.name);
-  pinviz::RerunVisualizer rr(robot.model, robot.vizModel);
+  pinrerun::RerunVisualizer rr(robot.model, robot.vizModel);
   rr.stream.set_time_seconds("stable_time", 0.0);
   rr.initViewer();
 

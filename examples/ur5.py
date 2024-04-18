@@ -8,7 +8,7 @@ robot = erd.load("ur5")
 model = robot.model
 visual_model = robot.visual_model
 rr = pyseptum.RerunVisualizer(model, visual_model)
-rr.initViewer()
+rr.loadViewerModel()
 q0 = pin.neutral(model)
 rr.display(q0)
 

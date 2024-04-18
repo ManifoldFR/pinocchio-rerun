@@ -5,7 +5,7 @@
 #include "eigen_adapters.hpp"
 #include "load_mesh.hpp"
 
-namespace pinviz {
+namespace pinrerun {
 
 namespace internal {
 
@@ -85,7 +85,7 @@ MeshDescription loadMesh(const std::string &meshPath, Vector3f scale, Vector4d c
                               aiPrimitiveType_LINE | aiPrimitiveType_POINT);
   const aiScene *scene = importer.ReadFile(
       meshPath, aiProcess_CalcTangentSpace | aiProcess_Triangulate |
-                    aiProcess_GenNormals | aiProcess_SortByPType |
+                    aiProcess_GenSmoothNormals | aiProcess_SortByPType |
                     aiProcess_GenUVCoords | aiProcess_OptimizeMeshes |
                     aiProcess_RemoveComponent | aiProcess_FindDegenerates |
                     aiProcess_ImproveCacheLocality);
@@ -125,4 +125,4 @@ rerun::archetypes::Mesh3D meshDescriptionToRerun(MeshDescription &&mesh) {
   return rmesh;
 }
 
-} // namespace pinviz
+} // namespace pinrerun

@@ -2,7 +2,7 @@
 
 #include <Eigen/Core>
 
-namespace pinviz {
+namespace pinrerun {
 
 using Eigen::VectorXd;
 using VectorRef = Eigen::Ref<VectorXd>;
@@ -11,4 +11,4 @@ using Eigen::Matrix3Xf;
 using Eigen::Vector3f;
 using std::vector;
 
-} // namespace pinviz
+} // namespace pinrerun
