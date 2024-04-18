@@ -11,7 +11,7 @@ namespace internal {
 
 /// @returns Number of vertices
 uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
-                    MeshDescription &mesh, Vector3f scale, Vector4d color) {
+                    MeshDescription &mesh, Vector3f scale, Vector4f color) {
   if (!node)
     return 0;
 
@@ -40,8 +40,8 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
       mesh.vertices.push_back(scale.asDiagonal() * p);
 
       vector<uint32_t> c_;
-      for (int cId=0; cId<4; ++cId) {
-        c_.push_back((uint32_t) (COLOR_FLOAT_TO_INT(color[cId])));
+      for (int cId = 0; cId < 4; ++cId) {
+        c_.push_back((uint32_t)(COLOR_FLOAT_TO_INT(color[cId])));
       }
       uint32_t c = PASTEL_RGBA(c_[0], c_[1], c_[2], c_[3]);
       mesh.colors.push_back(c);
@@ -66,7 +66,8 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
   }
 
   for (uint cIdx = 0; cIdx < node->mNumChildren; cIdx++) {
-    nbVtx += buildMesh_impl(scene, node->mChildren[cIdx], nbVtx, mesh, scale, color);
+    nbVtx +=
+        buildMesh_impl(scene, node->mChildren[cIdx], nbVtx, mesh, scale, color);
   }
 
   return nbVtx;
@@ -75,11 +76,13 @@ uint buildMesh_impl(const aiScene *scene, const aiNode *node, uint vtxOffset,
 } // namespace internal
 
 void buildMesh(const aiScene *scene, uint vtxOffset, MeshDescription &mesh,
-               Vector3f scale, Vector4d color) {
-  internal::buildMesh_impl(scene, scene->mRootNode, vtxOffset, mesh, scale, color);
+               Vector3f scale, Vector4f color) {
+  internal::buildMesh_impl(scene, scene->mRootNode, vtxOffset, mesh, scale,
+                           color);
 }
 
-MeshDescription loadMesh(const std::string &meshPath, Vector3f scale, Vector4d color) {
+MeshDescription loadMesh(const std::string &meshPath, Vector3f scale,
+                         Vector4f color) {
   ::Assimp::Importer importer;
   importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE,
                               aiPrimitiveType_LINE | aiPrimitiveType_POINT);
