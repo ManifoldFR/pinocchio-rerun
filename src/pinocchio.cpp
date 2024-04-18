@@ -1,5 +1,6 @@
 #include "./pinocchio.hpp"
 #include "./load_mesh.hpp"
+#include <fmt/format.h>
 
 namespace pinrerun {
 
@@ -9,26 +10,34 @@ bool loadPinocchioGeometry(const pinocchio::GeometryObject &obj,
   using namespace hpp::fcl;
 
   const CollisionGeometry &geom = *obj.geometry;
+  const auto objType = geom.getObjectType();
+  const auto nodeType = geom.getNodeType();
 
-  switch (geom.getNodeType()) {
-  case BV_AABB:
-  case BV_OBB:
-  case BV_RSS:
-  case BV_kIOS:
-  case BV_OBBRSS:
-  case BV_KDOP16:
-  case BV_KDOP18:
-  case BV_KDOP24: {
-    auto meshDesc = loadMesh(obj.meshPath, obj.meshScale.cast<float>());
-    auto rrMesh = meshDescriptionToRerun(std::move(meshDesc));
-    rr.log_timeless(getEntityPath(obj, prefix).string(), rrMesh);
+  switch (objType) {
+  case OT_BVH:
+    switch (nodeType) {
+    case BV_AABB:
+    case BV_OBB:
+    case BV_RSS:
+    case BV_kIOS:
+    case BV_OBBRSS:
+    case BV_KDOP16:
+    case BV_KDOP18:
+    case BV_KDOP24: {
+      auto meshDesc = loadMesh(obj.meshPath, obj.meshScale.cast<float>());
+      auto rrMesh = meshDescriptionToRerun(std::move(meshDesc));
+      rr.log_timeless(getEntityPath(obj, prefix).string(), rrMesh);
+      break;
+    }
+    default:
+      fmt::println("Unknown or unsupported HPP-FCL node type {}.",
+                   fmt::underlying(nodeType));
+      break;
+    }
     break;
-  }
-  case GEOM_BOX: {
-    break;
-  }
   default:
-    throw std::logic_error("Unknown or unsupported HPP-FCL node type.");
+    fmt::println("Unknown or unsupported HPP-FCL object type {}.",
+                 fmt::underlying(objType));
     break;
   }
 
