@@ -1,7 +1,7 @@
 #include "./pinocchio.hpp"
 #include "./load_mesh.hpp"
 
-namespace pinviz {
+namespace pinrerun {
 
 bool loadPinocchioGeometry(const pinocchio::GeometryObject &obj,
                            const rerun::RecordingStream &rr,
@@ -45,4 +45,4 @@ void loadPinocchioModel(const pinocchio::GeometryModel &geomModel,
   }
 }
 
-} // namespace pinviz
+} // namespace pinrerun

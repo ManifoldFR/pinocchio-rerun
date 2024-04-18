@@ -4,7 +4,7 @@
 
 #include <pinocchio/multibody/geometry.hpp>
 
-namespace pinviz {
+namespace pinrerun {
 
 template <typename Scalar>
 auto pinSE3toRerun(const pinocchio::SE3Tpl<Scalar, Eigen::ColMajor> &tr_) {
@@ -54,4 +54,4 @@ protected:
   bool m_initialized;
 };
 
-} // namespace pinviz
+} // namespace pinrerun

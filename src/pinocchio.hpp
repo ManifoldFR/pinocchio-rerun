@@ -9,7 +9,7 @@
 #include "eigen_adapters.hpp"
 #include "data_types.hpp"
 
-namespace pinviz {
+namespace pinrerun {
 
 namespace fs = std::filesystem;
 
@@ -34,4 +34,4 @@ inline auto eigenStdVecCast(const vector<Eigen::Vector3d> &container) {
   return out;
 }
 
-} // namespace pinviz
+} // namespace pinrerun

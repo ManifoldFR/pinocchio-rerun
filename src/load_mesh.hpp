@@ -5,7 +5,7 @@
 
 #include "data_types.hpp"
 
-namespace pinviz {
+namespace pinrerun {
 
 using Vector3u = Eigen::Matrix<uint32_t, 3, 1>;
 
@@ -24,4 +24,4 @@ MeshDescription loadMesh(const std::string &meshPath,
 
 rerun::archetypes::Mesh3D meshDescriptionToRerun(MeshDescription &&mesh);
 
-} // namespace pinviz
+} // namespace pinrerun

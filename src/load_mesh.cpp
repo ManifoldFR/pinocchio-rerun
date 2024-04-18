@@ -5,7 +5,7 @@
 #include "eigen_adapters.hpp"
 #include "load_mesh.hpp"
 
-namespace pinviz {
+namespace pinrerun {
 
 namespace internal {
 
@@ -117,4 +117,4 @@ rerun::archetypes::Mesh3D meshDescriptionToRerun(MeshDescription &&mesh) {
   return rmesh;
 }
 
-} // namespace pinviz
+} // namespace pinrerun

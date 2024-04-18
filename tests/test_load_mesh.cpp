@@ -5,7 +5,7 @@
 #include "./util.hpp"
 #include "load_mesh.hpp"
 
-using namespace pinviz;
+using namespace pinrerun;
 
 const fs::path MAMMOTH_FILE = fs::path(ASSET_DIR) / "mammoth.obj";
 MeshDescription mesh;

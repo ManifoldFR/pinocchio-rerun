@@ -21,9 +21,9 @@ include(cmake-module/base.cmake)
 compute_project_args(PROJECT_ARGS LANGUAGES CXX)
 project(${PROJECT_NAME} ${PROJECT_ARGS})
 
-find_package(pinocchio REQUIRED)
-find_package(assimp REQUIRED)
-find_package(fmt 10.0 REQUIRED)
+add_project_dependency(pinocchio REQUIRED)
+add_project_dependency(assimp REQUIRED)
+add_project_dependency(fmt 10.0 REQUIRED)
 
 set(INSTALL_DOCUMENTATION OFF)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
