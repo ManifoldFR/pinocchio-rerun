@@ -17,7 +17,7 @@ defaults:
     shell: bash -el {0}
 
 jobs:
-  pinocchio-rerun:
+  pinocchio-rerun-conda:
     name: ${{ matrix.os }} - Python ${{ matrix.python-version }} ${{ matrix.build_type }}
     runs-on: ${{ matrix.os }}
 
@@ -96,3 +96,18 @@ jobs:
         conda activate pinrerun
         cd build
         cmake --build . --target uninstall
+
+  check:
+    if: always()
+    name: check-linux-conda
+
+    needs:
+    - pinocchio-rerun-conda
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Decide whether the needed jobs succeeded or failed
+      uses: re-actors/alls-green@release/v1
+      with:
+        jobs: ${{ toJSON(needs) }}
