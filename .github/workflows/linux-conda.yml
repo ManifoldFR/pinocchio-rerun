@@ -12,13 +12,14 @@ on:
       - '*.md'
       - '.gitignore'
 
+defaults:
+  run:
+    shell: bash -el {0}
+
 jobs:
   pinocchio-rerun:
     name: ${{ matrix.os }} - Python ${{ matrix.python-version }} ${{ matrix.build_type }}
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash -el {0}
 
     env:
       CCACHE_BASEDIR: "${GITHUB_WORKSPACE}"
@@ -38,6 +39,13 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Checkout pinocchio-visualizers
+      uses: actions/checkout@v4
+      with:
+        repository: ManifoldFR/pinocchio-visualizers
+        submodules: recursive
+        path: ./visualizers
+
     - uses: actions/cache@v4
       with:
         path: .ccache
@@ -51,10 +59,22 @@ jobs:
         environment-file: .github/workflows/conda/conda-env.yml
         python-version: ${{ matrix.python-version }}
 
-    - name: Build
+    - name: Build pinocchio-visualizers
+      run: |
+        cd ./visualizers
+        conda activate pinrerun
+        mkdir build && cd build
+
+        cmake .. \
+          -GNinja \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+          -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        cmake --build . --target install
+
+    - name: Build pinrerun
       run: |
         conda activate pinrerun
-        echo $CONDA_PREFIX
 
         mkdir build && cd build
 
