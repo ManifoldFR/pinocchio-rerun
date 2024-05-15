@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 set(PROJECT_NAME septum)
-set(PROJECT_URL "https://github.com/ManifoldFR/pin-viz-cpp")
+set(PROJECT_URL "https://github.com/ManifoldFR/pinocchio-rerun")
 set(PROJECT_DESCRIPTION "A C++-based visualizer for Pinocchio using rerun")
 set(PROJECT_CUSTOM_HEADER_EXTENSION "hpp")
 set(PROJECT_VERSION 0.1.0)
