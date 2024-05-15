@@ -1,0 +1,17 @@
+
+name: pinocchio-rerun
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - cmake
+  - ninja
+  - cxx-compiler
+  - ccache
+  - gtest
+  - pinocchio
+  - eigen
+  - rerun-sdk
+  - librerun-sdk
+  - fmt
+  - example-robot-data
