@@ -1,2 +1,2 @@
 [tool.ruff.per-file-ignores]
-"python/pyseptum/__init__.py" = ["F401", "F403"]
+"python/pinocchio_rerun/__init__.py" = ["F401", "F403"]

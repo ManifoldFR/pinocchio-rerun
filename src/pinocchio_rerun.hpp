@@ -9,8 +9,9 @@ namespace pinrerun {
 
 inline std::string printVersion(const char *delimiter = ".") {
   std::ostringstream oss;
-  oss << SEPTUM_MAJOR_VERSION << delimiter << SEPTUM_MINOR_VERSION << delimiter
-      << SEPTUM_PATCH_VERSION;
+  oss << PINOCCHIO_RERUN_MAJOR_VERSION << delimiter
+      << PINOCCHIO_RERUN_MINOR_VERSION << delimiter
+      << PINOCCHIO_RERUN_PATCH_VERSION;
   return oss.str();
 }
 

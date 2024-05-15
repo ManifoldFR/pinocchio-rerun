@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.18)
-set(PROJECT_NAME septum)
+set(PROJECT_NAME pinocchio_rerun)
 set(PROJECT_URL "https://github.com/ManifoldFR/pinocchio-rerun")
 set(PROJECT_DESCRIPTION "A C++-based visualizer for Pinocchio using rerun")
 set(PROJECT_CUSTOM_HEADER_EXTENSION "hpp")
+set(PROJECT_CUSTOM_HEADER_DIR ${PROJECT_NAME})
 set(PROJECT_VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -60,9 +61,10 @@ file(GLOB lib_HEADERS CONFIGURE_DEPENDS "src/*.hpp")
 add_library(${LIB_NAME} SHARED "${lib_SRC}")
 set_standard_output_directory(${LIB_NAME})
 
-set(SEPTUM_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
-target_include_directories(${LIB_NAME} PUBLIC $<BUILD_INTERFACE:${SEPTUM_SRC_DIR}>
-                                              $<INSTALL_INTERFACE:include>)
+set(pinocchio_rerun_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_include_directories(
+  ${LIB_NAME} PUBLIC $<BUILD_INTERFACE:${pinocchio_rerun_SRC_DIR}>
+                     $<INSTALL_INTERFACE:include>)
 set(_build_dir_includes ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME})
 target_include_directories(${LIB_NAME} PUBLIC $<BUILD_INTERFACE:${_build_dir_includes}>)
 target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
