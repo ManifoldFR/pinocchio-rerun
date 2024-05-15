@@ -3,7 +3,7 @@
 #include <eigenpy/std-vector.hpp>
 #include <pinocchio_visualizers/python/visitor.hpp>
 
-#include "septum.hpp"
+#include "pinocchio_rerun.hpp"
 
 #define PYMODULE() BOOST_PYTHON_MODULE(MODULE_NAME)
 

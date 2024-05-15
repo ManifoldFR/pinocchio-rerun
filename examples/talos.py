@@ -1,4 +1,4 @@
-import pyseptum
+import pinocchio_rerun
 import example_robot_data as erd
 import pinocchio as pin
 import numpy as np
@@ -7,7 +7,7 @@ import numpy as np
 robot = erd.load("talos")
 model = robot.model
 visual_model = robot.visual_model
-rr = pyseptum.RerunVisualizer(model, visual_model)
+rr = pinocchio_rerun.RerunVisualizer(model, visual_model)
 rr.initViewer()
 assert rr.initialized
 q0 = pin.neutral(model)
