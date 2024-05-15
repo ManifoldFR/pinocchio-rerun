@@ -9,15 +9,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CXX_DISABLE_WERROR True)
 
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
-endif()
-
-include(FetchContent)
 cmake_policy(SET CMP0135 OLD)
 
 include(CMakeDependentOption)
 include(cmake-module/base.cmake)
+include(cmake-module/ide.cmake)
 compute_project_args(PROJECT_ARGS LANGUAGES CXX)
 project(${PROJECT_NAME} ${PROJECT_ARGS})
 
@@ -25,6 +21,7 @@ add_project_dependency(pinocchio REQUIRED)
 add_project_dependency(pinocchio_visualizers REQUIRED)
 add_project_dependency(assimp REQUIRED)
 add_project_dependency(fmt 10.0 REQUIRED)
+add_project_dependency(rerun_sdk REQUIRED)
 
 set(INSTALL_DOCUMENTATION OFF)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
@@ -32,17 +29,24 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_INSTALL_RPATH "\$ORIGIN")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH True)
 
-FetchContent_Declare(
-  rerun_sdk
-  URL https://github.com/rerun-io/rerun/releases/download/0.15.1/rerun_cpp_sdk.zip)
-FetchContent_GetProperties(rerun_sdk)
-if(NOT rerun_sdk_POPULATED)
-  # Fetch the content using previously declared details
-  FetchContent_Populate(rerun_sdk)
-  add_subdirectory(${rerun_sdk_SOURCE_DIR} ${rerun_sdk_BINARY_DIR} EXCLUDE_FROM_ALL)
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE
+      Release
+      CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel"
+                                               "RelWithDebInfo")
 endif()
 
-set_target_properties(rerun_sdk PROPERTIES POSITION_INDEPENDENT_CODE ON)
+# Set binary, library and archive directories
+function(set_standard_output_directory target)
+  set_target_properties(
+    ${target}
+    PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+               LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+endfunction()
 
 option(BUILD_PYTHON_INTERFACE "Build the Python bindings for this library." ON)
 cmake_dependent_option(
@@ -54,6 +58,7 @@ file(GLOB lib_SRC CONFIGURE_DEPENDS "src/*.cpp")
 file(GLOB lib_HEADERS CONFIGURE_DEPENDS "src/*.hpp")
 
 add_library(${LIB_NAME} SHARED "${lib_SRC}")
+set_standard_output_directory(${LIB_NAME})
 
 set(SEPTUM_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 target_include_directories(${LIB_NAME} PUBLIC $<BUILD_INTERFACE:${SEPTUM_SRC_DIR}>
