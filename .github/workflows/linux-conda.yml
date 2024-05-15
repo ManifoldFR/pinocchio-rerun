@@ -1,0 +1,78 @@
+name: CI on Linux via Conda
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '*.md'
+      - '.gitignore'
+  pull_request:
+    paths-ignore:
+      - '*.md'
+      - '.gitignore'
+
+jobs:
+  pinocchio-rerun:
+    name: ${{ matrix.os }} - Python ${{ matrix.python-version }} ${{ matrix.build_type }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -el {0}
+
+    env:
+      CCACHE_BASEDIR: "${GITHUB_WORKSPACE}"
+      CCACHE_DIR: "${GITHUB_WORKSPACE}/.ccache"
+      CCACHE_COMPRESS: true
+      CCACHE_COMPRESSLEVEL: 6
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest"]
+        build_type: [Release, Debug]
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - uses: actions/cache@v3
+      with:
+        path: .ccache
+        key: ccache-conda-${{ matrix.os }}-${{ matrix.build_type }}-${{ github.sha }}
+        restore-keys: ccache-conda-${{ matrix.os }}-${{ matrix.build_type }}-
+
+    - uses: conda-incubator/setup-miniconda@v3
+      with:
+        activate-environment: pinrerun
+        auto-update-conda: true
+        environment-file: .github/workflows/conda/conda-env.yml
+        python-version: ${{ matrix.python-version }}
+
+    - name: Build
+      run: |
+        conda activate pinrerun
+        echo $CONDA_PREFIX
+
+        mkdir build && cd build
+
+        cmake .. \
+          -GNinja \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+          -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -DPYTHON_EXECUTABLE=$(which python3) \
+          -DBUILD_PYTHON_INTERFACE=ON \
+          -DBUILD_DOCUMENTATION=OFF \
+          -DGENERATE_PYTHON_STUBS=ON
+        cmake --build .
+        ctest --output-on-failure
+        cmake --install .
+
+    - name: Uninstall pinrerun
+      run: |
+        conda activate pinrerun
+        cd build
+        cmake --build . --target uninstall
