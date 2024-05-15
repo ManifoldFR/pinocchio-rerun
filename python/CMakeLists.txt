@@ -23,7 +23,7 @@ set_target_properties(
 
 install(TARGETS ${PYLIB} DESTINATION ${PYLIB_INSTALL_DIR})
 
-PYTHON_INSTALL_ON_SITE(${PYLIB} __init__.py)
+python_install_on_site(${PYLIB} __init__.py)
 
 # Generate stubs
 
