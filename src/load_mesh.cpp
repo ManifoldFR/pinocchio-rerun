@@ -112,17 +112,14 @@ MeshDescription loadMesh(const std::string &meshPath, Vector3f scale,
 rerun::archetypes::Mesh3D meshDescriptionToRerun(MeshDescription &&mesh) {
   size_t numTris = mesh.faceTriangles.size();
 
-  vector<uint32_t> indices;
+  vector<rerun::components::TriangleIndices> indices;
   for (size_t i = 0; i < numTris; i++) {
     Vector3u &tri = mesh.faceTriangles[i];
-    indices.push_back(tri[0]);
-    indices.push_back(tri[1]);
-    indices.push_back(tri[2]);
+    indices.emplace_back(tri[0], tri[1], tri[2]);
   }
 
   auto rmesh = rerun::archetypes::Mesh3D(std::move(mesh.vertices))
-                   .with_mesh_properties(
-                       rerun::components::MeshProperties(std::move(indices)))
+                   .with_triangle_indices(std::move(indices))
                    .with_vertex_normals(std::move(mesh.normals))
                    .with_vertex_colors(std::move(mesh.colors));
   return rmesh;

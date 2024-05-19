@@ -11,7 +11,7 @@ dependencies:
   - gtest
   - pinocchio
   - eigen
-  - rerun-sdk'>=0.16'
-  - librerun-sdk'>=0.16'
+  - rerun-sdk>=0.16.0
+  - librerun-sdk>=0.16.0
   - fmt
   - example-robot-data
