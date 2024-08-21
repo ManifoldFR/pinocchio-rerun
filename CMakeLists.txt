@@ -22,7 +22,7 @@ add_project_dependency(pinocchio REQUIRED)
 add_project_dependency(pinocchio_visualizers REQUIRED)
 add_project_dependency(assimp REQUIRED)
 add_project_dependency(fmt 10.0 REQUIRED)
-add_project_dependency(rerun_sdk 0.17.0 REQUIRED)
+add_project_dependency(rerun_sdk 0.18.0 REQUIRED)
 
 set(INSTALL_DOCUMENTATION OFF)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
