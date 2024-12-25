@@ -1,5 +1,0 @@
-enable_markup: false
-first_comment_is_literal: true
-line_width: 90
-disabled_codes:
-  - C0103
