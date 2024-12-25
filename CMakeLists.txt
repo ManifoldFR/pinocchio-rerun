@@ -15,14 +15,14 @@ cmake_policy(SET CMP0135 OLD)
 include(CMakeDependentOption)
 include(cmake-module/base.cmake)
 include(cmake-module/ide.cmake)
-compute_project_args(PROJECT_ARGS LANGUAGES CXX)
+COMPUTE_PROJECT_ARGS(PROJECT_ARGS LANGUAGES CXX)
 project(${PROJECT_NAME} ${PROJECT_ARGS})
 
-add_project_dependency(pinocchio REQUIRED)
-add_project_dependency(pinocchio_visualizers REQUIRED)
-add_project_dependency(assimp REQUIRED)
-add_project_dependency(fmt 10.0 REQUIRED)
-add_project_dependency(rerun_sdk 0.18.2 REQUIRED)
+ADD_PROJECT_DEPENDENCY(pinocchio REQUIRED)
+ADD_PROJECT_DEPENDENCY(pinocchio_visualizers REQUIRED)
+ADD_PROJECT_DEPENDENCY(assimp REQUIRED)
+ADD_PROJECT_DEPENDENCY(fmt 10.0 REQUIRED)
+ADD_PROJECT_DEPENDENCY(rerun_sdk 0.18.2 REQUIRED)
 
 set(INSTALL_DOCUMENTATION OFF)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
@@ -32,27 +32,33 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH True)
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to 'Release' as none was specified.")
-  set(CMAKE_BUILD_TYPE
-      Release
-      CACHE STRING "Choose the type of build." FORCE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
   # Set the possible values of build type for cmake-gui
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel"
-                                               "RelWithDebInfo")
+  set_property(
+    CACHE CMAKE_BUILD_TYPE
+    PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo"
+  )
 endif()
 
 # Set binary, library and archive directories
 function(set_standard_output_directory target)
   set_target_properties(
     ${target}
-    PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
-               LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+    PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
+      LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+      ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+  )
 endfunction()
 
 option(BUILD_PYTHON_INTERFACE "Build the Python bindings for this library." ON)
 cmake_dependent_option(
-  GENERATE_PYTHON_STUBS "Generate stub files for the Python library." ON
-  BUILD_PYTHON_INTERFACE OFF)
+  GENERATE_PYTHON_STUBS
+  "Generate stub files for the Python library."
+  ON
+  BUILD_PYTHON_INTERFACE
+  OFF
+)
 
 set(LIB_NAME ${PROJECT_NAME})
 file(GLOB lib_SRC CONFIGURE_DEPENDS "src/*.cpp")
@@ -63,15 +69,24 @@ set_standard_output_directory(${LIB_NAME})
 
 set(pinocchio_rerun_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 target_include_directories(
-  ${LIB_NAME} PUBLIC $<BUILD_INTERFACE:${pinocchio_rerun_SRC_DIR}>
-                     $<INSTALL_INTERFACE:include>)
+  ${LIB_NAME}
+  PUBLIC
+    $<BUILD_INTERFACE:${pinocchio_rerun_SRC_DIR}>
+    $<INSTALL_INTERFACE:include>
+)
 set(_build_dir_includes ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME})
-target_include_directories(${LIB_NAME} PUBLIC $<BUILD_INTERFACE:${_build_dir_includes}>)
+target_include_directories(
+  ${LIB_NAME}
+  PUBLIC $<BUILD_INTERFACE:${_build_dir_includes}>
+)
 target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
 target_link_libraries(${LIB_NAME} PRIVATE fmt::fmt)
 target_link_libraries(${LIB_NAME} PUBLIC assimp::assimp)
 target_link_libraries(${LIB_NAME} PUBLIC pinocchio::pinocchio)
-target_link_libraries(${LIB_NAME} PUBLIC pinocchio_visualizers::pinocchio_visualizers)
+target_link_libraries(
+  ${LIB_NAME}
+  PUBLIC pinocchio_visualizers::pinocchio_visualizers
+)
 
 install(TARGETS ${LIB_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 install(FILES ${lib_HEADERS} DESTINATION include/${PROJECT_NAME})
