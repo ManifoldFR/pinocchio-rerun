@@ -16,6 +16,6 @@ repos:
     -   id: check-merge-conflict
     -   id: trailing-whitespace
 -   repo: https://github.com/BlankSpruce/gersemi
-    rev: 0.17.1
+    rev: 0.18.0
     hooks:
     -   id: gersemi
