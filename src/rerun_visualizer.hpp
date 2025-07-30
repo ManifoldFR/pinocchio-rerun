@@ -2,7 +2,7 @@
 
 #include "pinocchio.hpp"
 
-#include <pinocchio_visualizers/base-visualizer.hpp>
+#include <pinocchio/visualizers/base-visualizer.hpp>
 
 namespace pinrerun {
 
@@ -14,10 +14,11 @@ auto pinSE3toRerun(const pinocchio::SE3Tpl<Scalar, Eigen::ColMajor> &tr_) {
 }
 
 using pinocchio::FrameIndex;
-using BaseVisualizer = pinocchio_visualizers::BaseVisualizer<double>;
+using BaseVisualizer = pinocchio::visualizers::BaseVisualizer;
 
 class RerunVisualizer : public BaseVisualizer {
 public:
+  using BaseVisualizer::play;
   RerunVisualizer(const pinocchio::Model &model,
                   const pinocchio::GeometryModel &geomModel);
 

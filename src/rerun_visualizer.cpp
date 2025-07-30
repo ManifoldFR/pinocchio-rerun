@@ -26,7 +26,7 @@ void RerunVisualizer::displayImpl() {
   for (uint i = 0; i < ngeoms; i++) {
     const auto &gobj = geomObjs[i];
     const pinocchio::SE3 &M =
-        visualData.oMg[m_visualModel->getGeometryId(gobj.name)];
+        m_visualData->oMg[m_visualModel->getGeometryId(gobj.name)];
 
     auto path = getEntityPath(gobj, visualPrefix()).string();
     stream.log(path, pinSE3toRerun(M));
@@ -40,14 +40,14 @@ void RerunVisualizer::drawFrameVelocities(const vector<FrameIndex> &frame_ids) {
   vector<std::string> labels(nframes);
   for (size_t i = 0; i < frame_ids.size(); ++i) {
     auto frame_id = frame_ids[i];
-    pinocchio::updateFramePlacement(*m_model, data, frame_id);
+    pinocchio::updateFramePlacement(m_model.get(), *m_data, frame_id);
 
-    auto vel = pinocchio::getFrameVelocity(*m_model, data, frame_id,
+    auto vel = pinocchio::getFrameVelocity(m_model.get(), *m_data, frame_id,
                                            pinocchio::LOCAL_WORLD_ALIGNED)
                    .cast<float>();
     frame_vels[i] = vel.linear();
-    frame_pos[i] = data.oMf[frame_id].cast<float>().translation();
-    labels[i] = m_model->frames[frame_id].name;
+    frame_pos[i] = m_data->oMf[frame_id].cast<float>().translation();
+    labels[i] = m_model.get().frames[frame_id].name;
   }
   std::string frame_vel_prefix = m_prefix + "/frame_vels";
   stream.log(frame_vel_prefix,

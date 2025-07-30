@@ -8,7 +8,7 @@ robot = erd.load("talos")
 model = robot.model
 visual_model = robot.visual_model
 rr = pinocchio_rerun.RerunVisualizer(model, visual_model)
-rr.initViewer()
+rr.loadViewerModel()
 assert rr.initialized
 q0 = pin.neutral(model)
 rr.display(q0)
