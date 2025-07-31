@@ -1,7 +1,7 @@
 #include <eigenpy/eigenpy.hpp>
 #include <eigenpy/optional.hpp>
 #include <eigenpy/std-vector.hpp>
-#include <pinocchio_visualizers/python/visitor.hpp>
+#include <pinocchio/bindings/python/visualizers/visualizer-visitor.hpp>
 
 #include "pinocchio_rerun.hpp"
 
@@ -40,7 +40,7 @@ PYMODULE() {
                                                   bp::no_init)
       .def(bp::init<Model const &, GeometryModel const &>(
           ("self"_a, "model", "geomModel")))
-      .def(pinviz::VisualizerVisitor<RerunVisualizer>())
+      .def(pinocchio::python::VisualizerPythonVisitor<RerunVisualizer>())
       .add_property("initialized", &RerunVisualizer::initialized)
       .def("switchTimeline", &RerunVisualizer::switchTimeline,
            ("self"_a, "name"_a), "Switch Rerun timelines.")

@@ -19,10 +19,9 @@ COMPUTE_PROJECT_ARGS(PROJECT_ARGS LANGUAGES CXX)
 project(${PROJECT_NAME} ${PROJECT_ARGS})
 
 ADD_PROJECT_DEPENDENCY(pinocchio REQUIRED)
-ADD_PROJECT_DEPENDENCY(pinocchio_visualizers REQUIRED)
 ADD_PROJECT_DEPENDENCY(assimp REQUIRED)
 ADD_PROJECT_DEPENDENCY(fmt 10.0 REQUIRED)
-ADD_PROJECT_DEPENDENCY(rerun_sdk 0.21.0 REQUIRED)
+ADD_PROJECT_DEPENDENCY(rerun_sdk 0.23.4 REQUIRED)
 
 set(INSTALL_DOCUMENTATION OFF)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
@@ -83,10 +82,6 @@ target_link_libraries(${LIB_NAME} PUBLIC rerun_sdk)
 target_link_libraries(${LIB_NAME} PRIVATE fmt::fmt)
 target_link_libraries(${LIB_NAME} PUBLIC assimp::assimp)
 target_link_libraries(${LIB_NAME} PUBLIC pinocchio::pinocchio)
-target_link_libraries(
-  ${LIB_NAME}
-  PUBLIC pinocchio_visualizers::pinocchio_visualizers
-)
 
 install(TARGETS ${LIB_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 install(FILES ${lib_HEADERS} DESTINATION include/${PROJECT_NAME})
