@@ -6,7 +6,7 @@ find_package(eigenpy REQUIRED)
 file(GLOB py_SRC CONFIGURE_DEPENDS "*.cpp")
 
 set(PYLIB "${LIB_NAME}_pywrap")
-python3_add_library(${PYLIB} MODULE WITH_SOABI ${py_SRC})
+Python3_add_library(${PYLIB} MODULE WITH_SOABI ${py_SRC})
 
 target_link_libraries(${PYLIB} PUBLIC ${LIB_NAME} eigenpy::eigenpy)
 target_compile_definitions(${PYLIB} PRIVATE MODULE_NAME=${PYLIB})
