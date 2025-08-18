@@ -20,7 +20,9 @@ class RerunVisualizer : public BaseVisualizer {
 public:
   using BaseVisualizer::play;
   RerunVisualizer(const pinocchio::Model &model,
-                  const pinocchio::GeometryModel &geomModel);
+                  const pinocchio::GeometryModel &geomModel,
+                  const std::string &appID = "RerunVisualizer",
+                  const std::string &recID = "DefaultID");
 
   void loadViewerModel() override;
 
@@ -47,10 +49,13 @@ public:
 
   inline bool initialized() const { return m_initialized; }
 
+  std::string recordingID() const { return m_recordingID; }
+
 protected:
   void displayImpl() override;
   std::string m_prefix;
   bool m_initialized;
+  std::string m_recordingID;
 };
 
 } // namespace pinrerun

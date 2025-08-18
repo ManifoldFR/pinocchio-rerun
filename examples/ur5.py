@@ -7,7 +7,7 @@ import numpy as np
 robot = erd.load("ur5")
 model = robot.model
 visual_model = robot.visual_model
-rr = pinocchio_rerun.RerunVisualizer(model, visual_model)
+rr = pinocchio_rerun.RerunVisualizer(model, visual_model, app_id = "UR5Visualizer", rec_id = "ur5")
 rr.loadViewerModel()
 q0 = pin.neutral(model)
 rr.display(q0)

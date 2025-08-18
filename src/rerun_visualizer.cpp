@@ -6,9 +6,12 @@
 namespace pinrerun {
 
 RerunVisualizer::RerunVisualizer(const pinocchio::Model &model,
-                                 const pinocchio::GeometryModel &geomModel)
-    : BaseVisualizer(model, geomModel, nullptr), stream("RerunVisualizer"),
-      m_prefix("pinocchio/" + model.name), m_initialized(false) {
+                                 const pinocchio::GeometryModel &geomModel,
+                                 const std::string &appID,
+                                 const std::string &recID)
+    : BaseVisualizer(model, geomModel, nullptr), stream(appID, recID),
+      m_prefix("pinocchio/" + model.name), m_initialized(false),
+      m_recordingID(recID) {
   stream.spawn().exit_on_failure();
   stream.set_time_seconds("stable_time", 0.0);
 }
