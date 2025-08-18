@@ -38,10 +38,20 @@ PYMODULE() {
 
   bp::class_<RerunVisualizer, boost::noncopyable>("RerunVisualizer",
                                                   bp::no_init)
-      .def(bp::init<Model const &, GeometryModel const &>(
-          ("self"_a, "model", "geomModel")))
+      .def("__init__",
+           bp::make_constructor(
+               +[](const pinocchio::Model &model,
+                   const pinocchio::GeometryModel &geomModel,
+                   const std::string &appID, const std::string &recID) {
+                 return new RerunVisualizer(model, geomModel, appID, recID);
+               },
+               bp::default_call_policies(),
+               (bp::arg("model"), bp::arg("geom_model"),
+                bp::arg("app_id") = "RerunVisualizer",
+                bp::arg("rec_id") = "DefaultID")))
       .def(pinocchio::python::VisualizerPythonVisitor<RerunVisualizer>())
       .add_property("initialized", &RerunVisualizer::initialized)
+      .add_property("recordingID", &RerunVisualizer::recordingID)
       .def("switchTimeline", &RerunVisualizer::switchTimeline,
            ("self"_a, "name"_a), "Switch Rerun timelines.")
       .def("disableTimeline", &RerunVisualizer::disableTimeline,
